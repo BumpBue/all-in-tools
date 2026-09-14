@@ -25,6 +25,7 @@ import {
 
 const URL_VALUE_KEY = 'v';
 const URL_BASE_KEY = 'b';
+const URL_CUSTOM_BASE_KEY = 'cb';
 const URL_DEBOUNCE_MS = 400;
 
 const DEFAULT_BASE = 10;
@@ -54,25 +55,32 @@ export default function BaseConverter({ searchParams }: ToolComponentProps) {
 
   const initialBase = readBase(searchParams[URL_BASE_KEY], DEFAULT_BASE);
   const initialText = searchParams[URL_VALUE_KEY] ?? '';
+  // Without an explicit cb, a shared link that was typed in a non-standard base
+  // should reopen on that base rather than jumping back to the default.
+  const initialCustomBase = readBase(
+    searchParams[URL_CUSTOM_BASE_KEY],
+    (STANDARD_BASES as readonly number[]).includes(initialBase)
+      ? DEFAULT_CUSTOM_BASE
+      : initialBase,
+  );
 
   const [urlState, setUrlState] = useUrlState(
-    { [URL_VALUE_KEY]: initialText, [URL_BASE_KEY]: String(initialBase) },
+    {
+      [URL_VALUE_KEY]: initialText,
+      [URL_BASE_KEY]: String(initialBase),
+      [URL_CUSTOM_BASE_KEY]: String(initialCustomBase),
+    },
     { debounceMs: URL_DEBOUNCE_MS },
   );
 
   const activeBase = readBase(urlState[URL_BASE_KEY], DEFAULT_BASE);
+  const customBase = readBase(urlState[URL_CUSTOM_BASE_KEY], DEFAULT_CUSTOM_BASE);
   const text = urlState[URL_VALUE_KEY];
 
   const [value, setValue] = useState<bigint | null>(() => {
     const result = parseBigInt(initialText, initialBase);
     return result.ok ? result.value : null;
   });
-
-  const [customBase, setCustomBase] = useState(() =>
-    (STANDARD_BASES as readonly number[]).includes(initialBase)
-      ? DEFAULT_CUSTOM_BASE
-      : initialBase,
-  );
 
   const parsed = useMemo(() => parseBigInt(text, activeBase), [activeBase, text]);
   const showError = text.trim().length > 0 && !parsed.ok;
@@ -103,17 +111,18 @@ export default function BaseConverter({ searchParams }: ToolComponentProps) {
     if (result.ok) setValue(result.value);
   }
 
+  // Keep the number and restate it in the new base rather than reinterpreting
+  // the digits, which would silently change the value.
   function changeCustomBase(nextBase: number) {
-    setCustomBase(nextBase);
+    const restate =
+      activeBase === customBase && value !== null
+        ? {
+            [URL_VALUE_KEY]: formatBigInt(value, nextBase),
+            [URL_BASE_KEY]: String(nextBase),
+          }
+        : {};
 
-    // Keep the number and restate it in the new base rather than reinterpreting
-    // the digits, which would silently change the value.
-    if (activeBase === customBase && value !== null) {
-      setUrlState({
-        [URL_VALUE_KEY]: formatBigInt(value, nextBase),
-        [URL_BASE_KEY]: String(nextBase),
-      });
-    }
+    setUrlState({ [URL_CUSTOM_BASE_KEY]: String(nextBase), ...restate });
   }
 
   function clearAll() {
@@ -189,7 +198,11 @@ export default function BaseConverter({ searchParams }: ToolComponentProps) {
           </Select>
         </div>
         <div className="min-w-0 flex-1">
-          {renderField(customBase, t.customBase, 'custom')}
+          {renderField(
+            customBase,
+            format(t.customBase, { base: customBase }),
+            'custom',
+          )}
         </div>
       </div>
 
