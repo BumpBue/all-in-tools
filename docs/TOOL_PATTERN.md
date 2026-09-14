@@ -1,0 +1,112 @@
+# Adding a tool
+
+The pattern `base-converter` established. Follow it and a new tool is mostly
+typing.
+
+## Files
+
+```
+src/tools/<slug>/
+  logic.ts        pure functions, no React, no DOM
+  logic.test.ts   unit tests for logic.ts
+  index.tsx       'use client', default export, the UI
+```
+
+`logic.ts` never imports React. That is what makes it testable without
+rendering, and it is where the real behaviour lives. `index.tsx` should read as
+wiring: state, layout, and calls into `logic.ts`.
+
+## Registering
+
+Add one line to `src/tools/registry.tsx`:
+
+```tsx
+'<slug>': dynamic(() => import('@/tools/<slug>'), { loading: ToolLoading }),
+```
+
+Then flip `status` to `'ready'` in `src/config/tools/<category>.ts`.
+`src/tools/registry.test.ts` fails if a ready tool has no component, so the two
+cannot drift.
+
+Keep SSR on. The markup belongs in the HTML for search engines and for readers
+whose JavaScript has not arrived. Only pass `ssr: false` when the tool needs a
+browser API on its very first render.
+
+**Known limit:** this does not split per slug. Everything reachable from the one
+`/tools/[slug]` route ends up in that route's client bundle, so every tool page
+carries every tool's code. Measured at about 5 kB gzipped per tool, so roughly
+180 kB once all 36 land. Neither `next/dynamic` nor a template-literal
+`import()` changes this; splitting would need a route per tool. Re-measure
+around the tenth tool and decide then.
+
+## The client boundary
+
+**Never pass a `Tool` object, or any other large object, into a Client
+Component.** Everything a client component takes as props is serialized into the
+RSC payload of every page that renders it. Pass primitives: a slug, a label, a
+number. Locale comes down as a prop from the server, not from `useLocale()`
+inside a leaf.
+
+Server Components render as much as possible; client islands stay small and
+specific. `ToolCard` and `ToolShell` are the examples to copy: the card is
+server-rendered, only the star and the share button are client.
+
+## State
+
+**URL state** (`useUrlState`) for anything worth sharing. Initial values arrive
+as `searchParams` props from the server, never from `window.location`, so the
+first client render matches the server. Writes go through
+`history.replaceState`, not `router.replace`, which would fire an RSC request on
+every keystroke. Debounce ~400ms.
+
+**localStorage** (`useLocalStorage`) for anything worth keeping. Set
+`needsStorage: true` in the registry; the key is derived from the slug, never
+typed by hand. Pass `debounceMs` for tools that write on every keystroke. The
+hook returns `[value, setValue, { isLoaded, error }]` — show the error, do not
+swallow it.
+
+A tool uses one or the other, rarely both.
+
+## Errors
+
+Parsing returns a discriminated result, never `null`:
+
+```ts
+type ParseResult = { ok: true; value: T } | { ok: false; code: ErrorCode; ... }
+```
+
+The code is machine-readable and carries whatever the message needs (the
+offending character, the base). The UI maps code to a dictionary string. Logic
+never builds user-facing prose, and the UI never guesses why something failed.
+
+Show the error under the field that caused it, set `aria-invalid` and point
+`aria-describedby` at it, and leave the other fields holding their last good
+value rather than blanking them.
+
+## Text
+
+Every string goes through `src/config/i18n.ts`, in both `th` and `en`. The
+English table is typed against the Thai one, so a missing key is a compile
+error. Use `format()` for placeholders.
+
+## Tests
+
+`logic.test.ts` covers, at minimum:
+
+- empty input, and whitespace-only input
+- zero, and leading zeros
+- negative values
+- every error code the parser can return, including which character offended
+- values past `Number.MAX_SAFE_INTEGER` where the tool deals in numbers
+- a round trip through every mode the tool supports, with a fixed seed so a
+  failure is reproducible
+- case handling, if input is case-insensitive
+
+Interactive behaviour worth a test goes in a `*.test.tsx` beside the component
+using `@/test/react`; see `command-palette.test.tsx`.
+
+## Accessibility
+
+Every field has a real `<label htmlFor>`. Set `spellCheck={false}`,
+`autoComplete="off"`, and an `inputMode` that matches. Icon-only buttons need
+`aria-label`. Anything that changes without a click needs a live region.
