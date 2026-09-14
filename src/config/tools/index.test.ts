@@ -17,8 +17,8 @@ const EXPECTED_TOOL_COUNT = 36;
 const LOWEST_ID = 1;
 const HIGHEST_ID = 36;
 const EXPECTED_PER_CATEGORY = {
-  productivity: 8,
-  finance: 8,
+  productivity: 9,
+  finance: 7,
   developer: 13,
   design: 7,
 } as const;
