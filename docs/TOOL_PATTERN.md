@@ -156,6 +156,13 @@ shape is in `regex-tester`:
 - `worker.ts` is thin. It reads a message, calls into `logic.ts`, posts the
   answer back. Everything worth testing stays in `logic.ts`, which the worker
   and the page both import, so it is one module in the bundle rather than two.
+- **A file handed to `new Worker(new URL('./worker.ts', import.meta.url))` is
+  published as source.** Turbopack emits the untranspiled TypeScript at
+  `/_next/static/media/worker.<hash>.ts` alongside the compiled worker, where
+  anyone can read it — comments and all. Nothing is executed from there, and
+  the rest of the client bundle is public anyway, but it is public *unminified*.
+  Keep worker files to plumbing: no keys, no unreleased copy, no notes you
+  would not put on a billboard. This was measured, not guessed.
 - The hook keeps the worker between requests and starts a deadline with each
   one. On the deadline it calls `terminate()` and drops the reference, so the
   next request builds a fresh worker.
