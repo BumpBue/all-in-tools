@@ -95,6 +95,15 @@ swallow it.
 
 A tool uses one or the other, rarely both.
 
+A Tier C tool with a real data model also declares how its items are counted, or
+the settings page will report something meaningless: a habit tracker holding
+`{ habits: [...], logs: {...} }` reads as two items by default. Set
+`hasItemCounter: true` in the registry and add the counter to `ITEM_COUNTERS` in
+`src/lib/storage-summary.ts`, keyed by slug — the registry ships to the client
+whole, so functions stay out of it. `storage-summary.test.ts` checks the flag
+and the map against each other. Do this when the data model is written, not
+later.
+
 ## Errors
 
 Parsing returns a discriminated result, never `null`:

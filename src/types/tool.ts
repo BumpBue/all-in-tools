@@ -28,6 +28,12 @@ export interface Tool {
   status: ToolStatus;
   needsStorage: boolean;
   storageKey?: string;
+  /**
+   * The tool counts its own stored items. The counter itself lives in
+   * src/lib/storage-summary.ts, keyed by slug, because the registry ships to
+   * the client whole and functions do not belong in it.
+   */
+  hasItemCounter?: boolean;
 }
 
 export type ToolDefinition = Omit<Tool, 'storageKey'>;

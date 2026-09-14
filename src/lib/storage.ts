@@ -4,6 +4,7 @@ import {
   buildToolStorageKey,
   parseToolStorageKey,
 } from '@/config/storage-keys';
+import { countStoredItems } from '@/lib/storage-summary';
 
 const EXPORT_APP_ID = 'tools';
 const EXPORT_SCHEMA_VERSION = 1;
@@ -316,12 +317,6 @@ export interface ImportPreview {
   tools: Array<{ slug: string; itemCount: number; updatedAt: number }>;
 }
 
-function countItems(data: unknown): number {
-  if (Array.isArray(data)) return data.length;
-  if (typeof data === 'object' && data !== null) return Object.keys(data).length;
-  return data === null || data === undefined ? 0 : 1;
-}
-
 // localStorage is billed in UTF-16 code units, so a character costs two bytes.
 const BYTES_PER_CHARACTER = 2;
 
@@ -348,7 +343,7 @@ export function summarizeStorage(): StorageSummary {
 
       tools.push({
         slug,
-        itemCount: countItems(parsed.data),
+        itemCount: countStoredItems(slug, parsed.data),
         updatedAt: parsed.updatedAt,
         bytes,
       });
@@ -370,7 +365,7 @@ export function inspectImport(json: string): ImportPreview {
     errors,
     tools: entries.map(([slug, envelope]) => ({
       slug,
-      itemCount: countItems(envelope.data),
+      itemCount: countStoredItems(slug, envelope.data),
       updatedAt: envelope.updatedAt,
     })),
   };
