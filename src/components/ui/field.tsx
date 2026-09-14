@@ -1,9 +1,4 @@
-import type {
-  InputHTMLAttributes,
-  LabelHTMLAttributes,
-  SelectHTMLAttributes,
-  TextareaHTMLAttributes,
-} from 'react';
+import type { ComponentPropsWithRef } from 'react';
 
 import { cn } from '@/lib/utils';
 
@@ -17,7 +12,7 @@ const CONTROL_IDLE = 'border-border hover:border-border-strong';
 export function Label({
   className,
   ...props
-}: LabelHTMLAttributes<HTMLLabelElement>) {
+}: ComponentPropsWithRef<'label'>) {
   return (
     <label
       className={cn('block text-sm font-medium text-foreground', className)}
@@ -26,14 +21,14 @@ export function Label({
   );
 }
 
-export function Input({ className, ...props }: InputHTMLAttributes<HTMLInputElement>) {
+export function Input({ className, ...props }: ComponentPropsWithRef<'input'>) {
   return <input className={cn(CONTROL, CONTROL_IDLE, 'h-10', className)} {...props} />;
 }
 
 export function Textarea({
   className,
   ...props
-}: TextareaHTMLAttributes<HTMLTextAreaElement>) {
+}: ComponentPropsWithRef<'textarea'>) {
   return (
     <textarea
       className={cn(CONTROL, CONTROL_IDLE, 'min-h-28 py-2 leading-relaxed', className)}
@@ -45,7 +40,7 @@ export function Textarea({
 export function Select({
   className,
   ...props
-}: SelectHTMLAttributes<HTMLSelectElement>) {
+}: ComponentPropsWithRef<'select'>) {
   return (
     <select
       className={cn(CONTROL, CONTROL_IDLE, 'h-10 cursor-pointer pr-8', className)}

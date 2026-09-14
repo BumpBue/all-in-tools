@@ -40,11 +40,14 @@ export function Header() {
           Toolbox
         </Link>
 
-        {/* Below sm the trigger is an icon only; a text field that narrow is
-            unusable and the palette provides the real input anyway. */}
-        <button
-          type="button"
-          onClick={openSearch}
+        {/* A real link so search still works with no JavaScript; below sm it is
+            an icon only, since a text field that narrow is unusable. */}
+        <Link
+          href="/search"
+          onClick={(event) => {
+            event.preventDefault();
+            openSearch();
+          }}
           aria-label={t.search.trigger}
           title={t.search.trigger}
           className="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-control text-muted transition-colors hover:bg-surface-subtle hover:text-foreground sm:ml-0 sm:h-9 sm:w-auto sm:min-w-0 sm:flex-1 sm:justify-start sm:gap-2 sm:border sm:border-border sm:bg-surface sm:px-3 sm:text-sm sm:hover:border-border-strong sm:hover:bg-surface"
@@ -54,7 +57,7 @@ export function Header() {
           <kbd className="ml-auto hidden shrink-0 rounded border border-border px-1.5 py-0.5 font-mono text-xs sm:inline">
             {isMac ? '⌘K' : 'Ctrl K'}
           </kbd>
-        </button>
+        </Link>
 
         <Toggle
           options={themeOptions}

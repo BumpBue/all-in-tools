@@ -22,6 +22,10 @@ const TH = {
     hintNavigate: 'เลื่อน',
     hintSelect: 'เปิด',
     hintClose: 'ปิด',
+    pageTitle: 'ค้นหาเครื่องมือ',
+    resultsFor: 'ผลการค้นหา "{query}"',
+    submit: 'ค้นหา',
+    backHome: 'กลับหน้าแรก',
   },
   theme: {
     label: 'ธีม',
@@ -87,6 +91,10 @@ const EN: Dictionary = {
     hintNavigate: 'Navigate',
     hintSelect: 'Open',
     hintClose: 'Close',
+    pageTitle: 'Search tools',
+    resultsFor: 'Results for "{query}"',
+    submit: 'Search',
+    backHome: 'Back to home',
   },
   theme: {
     label: 'Theme',

@@ -52,13 +52,19 @@ function isTypingTarget(node: EventTarget | null): boolean {
   );
 }
 
-export function CommandPalette({ onClose }: { onClose: () => void }) {
+export function CommandPalette({
+  initialQuery = '',
+  onClose,
+}: {
+  initialQuery?: string;
+  onClose: () => void;
+}) {
   const router = useRouter();
   const t = useT();
   const locale = useLocale();
   const { recent } = usePreferences();
 
-  const [query, setQuery] = useState('');
+  const [query, setQuery] = useState(initialQuery);
   const [activeIndex, setActiveIndex] = useState(0);
 
   const baseId = useId();

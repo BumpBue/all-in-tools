@@ -1,6 +1,6 @@
 import { ShieldCheck } from 'lucide-react';
 
-import { HeroSearchButton } from '@/components/home/hero-search-button';
+import { SearchForm } from '@/components/search/search-form';
 import { ToolSection } from '@/components/tool/tool-section';
 import { Icon } from '@/components/ui/icon';
 import { format, getMessages } from '@/config/i18n';
@@ -32,7 +32,10 @@ export default async function HomePage() {
         <p className="max-w-2xl text-muted">
           {format(t.home.heroSubtitle, { count: TOOL_COUNT })}
         </p>
-        <HeroSearchButton />
+        <SearchForm
+          placeholder={t.search.placeholder}
+          submitLabel={t.search.submit}
+        />
       </section>
 
       <ToolSection title={t.home.recent} tools={toTools(recent)} locale={locale} />

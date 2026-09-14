@@ -19,16 +19,16 @@ const SLASH_KEY = '/';
 const PALETTE_KEY = 'k';
 
 interface CommandPaletteApi {
-  open: () => void;
+  open: (query?: string) => void;
 }
 
 const CommandPaletteContext = createContext<CommandPaletteApi | null>(null);
 
 export function CommandPaletteProvider({ children }: { children: ReactNode }) {
-  const [isOpen, setIsOpen] = useState(false);
+  const [openWith, setOpenWith] = useState<string | null>(null);
 
-  const open = useCallback(() => setIsOpen(true), []);
-  const close = useCallback(() => setIsOpen(false), []);
+  const open = useCallback((query = '') => setOpenWith(query), []);
+  const close = useCallback(() => setOpenWith(null), []);
 
   useEffect(() => {
     const onKeyDown = (event: KeyboardEvent) => {
@@ -36,7 +36,7 @@ export function CommandPaletteProvider({ children }: { children: ReactNode }) {
       // accident, and jumping to another tool mid-edit is the point of it.
       if (event.key.toLowerCase() === PALETTE_KEY && (event.metaKey || event.ctrlKey)) {
         event.preventDefault();
-        setIsOpen(true);
+        setOpenWith('');
         return;
       }
 
@@ -45,7 +45,7 @@ export function CommandPaletteProvider({ children }: { children: ReactNode }) {
       if (isTypingTarget(event.target)) return;
 
       event.preventDefault();
-      setIsOpen(true);
+      setOpenWith('');
     };
 
     document.addEventListener('keydown', onKeyDown);
@@ -57,7 +57,9 @@ export function CommandPaletteProvider({ children }: { children: ReactNode }) {
   return (
     <CommandPaletteContext.Provider value={api}>
       {children}
-      {isOpen ? <CommandPalette onClose={close} /> : null}
+      {openWith !== null ? (
+        <CommandPalette initialQuery={openWith} onClose={close} />
+      ) : null}
     </CommandPaletteContext.Provider>
   );
 }
