@@ -38,6 +38,12 @@ const TH = {
     recent: 'ใช้ล่าสุด',
     favorites: 'รายการโปรด',
     allTools: 'เครื่องมือทั้งหมด',
+    heroTitle: 'เครื่องมือที่ต้องใช้บ่อย รวมไว้ที่เดียว',
+    heroSubtitle:
+      'คำนวณ แปลง จัดการงาน และช่วยงานเขียนโค้ด {count} เครื่องมือ เปิดใช้ได้ทันทีโดยไม่ต้องสมัครสมาชิก',
+    toolCount: '{count} เครื่องมือ',
+    privacyNote:
+      'ทุกอย่างประมวลผลในเบราว์เซอร์ของคุณ ไม่มีการส่งข้อมูลออกไปที่เซิร์ฟเวอร์',
   },
   tool: {
     comingSoon: 'เร็วๆ นี้',
@@ -46,6 +52,8 @@ const TH = {
     share: 'คัดลอกลิงก์',
     related: 'เครื่องมือที่เกี่ยวข้อง',
     notReady: 'เครื่องมือนี้กำลังพัฒนาอยู่ อีกไม่นานจะได้ใช้งาน',
+    backToCategory: 'ดูเครื่องมืออื่นในหมวดนี้',
+    linkCopied: 'คัดลอกลิงก์แล้ว',
   },
   footer: {
     privacy:
@@ -94,6 +102,12 @@ const EN: Dictionary = {
     recent: 'Recently used',
     favorites: 'Favourites',
     allTools: 'All tools',
+    heroTitle: 'The tools you keep reaching for, in one place',
+    heroSubtitle:
+      'Calculate, convert, organise and debug across {count} tools. Open one and start — no account needed.',
+    toolCount: '{count} tools',
+    privacyNote:
+      'Everything runs in your browser. No data is ever sent to a server.',
   },
   tool: {
     comingSoon: 'Coming soon',
@@ -102,6 +116,8 @@ const EN: Dictionary = {
     share: 'Copy link',
     related: 'Related tools',
     notReady: 'This tool is still being built and will be available soon.',
+    backToCategory: 'See other tools in this category',
+    linkCopied: 'Link copied',
   },
   footer: {
     privacy:

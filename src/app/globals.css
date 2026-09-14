@@ -98,3 +98,7 @@
     background-color: var(--color-accent-subtle);
   }
 }
+
+@utility tool-accent-tint {
+  background-color: color-mix(in oklab, var(--tool-accent) 14%, transparent);
+}
