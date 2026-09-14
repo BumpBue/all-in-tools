@@ -112,8 +112,8 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
     slug: 'text-cleaner',
     name: { th: 'ล้างข้อความ', en: 'Text Cleaner' },
     description: {
-      th: 'ลบช่องว่างเกิน บรรทัดว่าง และอักขระซ่อนที่ติดมาจากการคัดลอก พร้อมแปลงรูปแบบตัวพิมพ์',
-      en: 'Strip stray spaces, blank lines and invisible characters from pasted text, and switch letter case.',
+      th: 'ล้างช่องว่างเกิน บรรทัดว่าง อักขระล่องหน และปัญหาสระวรรณยุกต์ภาษาไทย พร้อมแปลงเลขไทยกับเลขอารบิก',
+      en: 'Strip stray spaces, blank lines and invisible characters, fix loose Thai vowels and tone marks, and swap Thai and Arabic digits.',
     },
     keywords: [
       'ล้างข้อความ',
@@ -122,6 +122,8 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
       'ตัวพิมพ์ใหญ่',
       'อักขระซ่อน',
       'ลบบรรทัดว่าง',
+      'เลขไทย',
+      'สระลอย',
       'text cleaner',
       'trim',
       'whitespace',
@@ -131,7 +133,7 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
     category: 'design',
     tier: 'A',
     icon: 'Eraser',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
