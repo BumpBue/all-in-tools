@@ -1,0 +1,98 @@
+import {
+  AlarmClock,
+  ArrowLeftRight,
+  Binary,
+  Braces,
+  CalendarCheck,
+  CalendarClock,
+  CalendarDays,
+  Clock,
+  Code,
+  Contrast,
+  CreditCard,
+  Database,
+  Diff,
+  Disc3,
+  Eraser,
+  FileCode,
+  FileText,
+  Fingerprint,
+  GraduationCap,
+  Grid2x2,
+  Hash,
+  ImageDown,
+  KeyRound,
+  Languages,
+  Layers,
+  Link as LinkIcon,
+  Paintbrush,
+  Palette,
+  Proportions,
+  QrCode,
+  Receipt,
+  Regex,
+  Repeat,
+  Rocket,
+  Ruler,
+  Scale,
+  Target,
+  Timer,
+  Wallet,
+  Wrench,
+  type LucideProps,
+} from 'lucide-react';
+
+// Named one by one so the bundle only carries the icons the registry uses;
+// a namespace import would pull in the whole library.
+export const ICONS = {
+  AlarmClock,
+  ArrowLeftRight,
+  Binary,
+  Braces,
+  CalendarCheck,
+  CalendarClock,
+  CalendarDays,
+  Clock,
+  Code,
+  Contrast,
+  CreditCard,
+  Database,
+  Diff,
+  Disc3,
+  Eraser,
+  FileCode,
+  FileText,
+  Fingerprint,
+  GraduationCap,
+  Grid2x2,
+  Hash,
+  ImageDown,
+  KeyRound,
+  Languages,
+  Layers,
+  Link: LinkIcon,
+  Paintbrush,
+  Palette,
+  Proportions,
+  QrCode,
+  Receipt,
+  Regex,
+  Repeat,
+  Rocket,
+  Ruler,
+  Scale,
+  Target,
+  Timer,
+  Wallet,
+} as const;
+
+export type IconName = keyof typeof ICONS;
+
+export function hasIcon(name: string): name is IconName {
+  return name in ICONS;
+}
+
+export function Icon({ name, ...props }: LucideProps & { name: string }) {
+  const Component = hasIcon(name) ? ICONS[name] : Wrench;
+  return <Component {...props} />;
+}
