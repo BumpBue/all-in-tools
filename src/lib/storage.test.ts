@@ -396,6 +396,24 @@ describe('summarizeStorage', () => {
     expect(summarizeStorage().tools[0]?.slug).toBe(SAMPLE_SLUG);
   });
 
+  // Two tools saved in the same millisecond used to come back in key order,
+  // which made the list reshuffle between redraws.
+  it('orders tools saved at the same moment by slug', () => {
+    const sameMoment = Date.now();
+    for (const slug of ['pomodoro', 'flashcards', 'habit-tracker']) {
+      storage.setItem(
+        buildToolStorageKey(slug),
+        JSON.stringify({ version: 1, data: 1, updatedAt: sameMoment }),
+      );
+    }
+
+    expect(summarizeStorage().tools.map((tool) => tool.slug)).toEqual([
+      'flashcards',
+      'habit-tracker',
+      'pomodoro',
+    ]);
+  });
+
   it('skips unreadable entries and keys outside the prefix', () => {
     setItem(SAMPLE_KEY, [1]);
     storage.setItem(UNRELATED_KEY, 'x');

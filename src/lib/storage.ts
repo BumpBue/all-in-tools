@@ -352,7 +352,9 @@ export function summarizeStorage(): StorageSummary {
     }
   }
 
-  tools.sort((a, b) => b.updatedAt - a.updatedAt);
+  // Two tools saved in the same millisecond would otherwise land in whatever
+  // order the keys came back in, and the list would reshuffle on a redraw.
+  tools.sort((a, b) => b.updatedAt - a.updatedAt || a.slug.localeCompare(b.slug));
   return { tools, totalBytes };
 }
 

@@ -44,6 +44,14 @@ function rows(): HTMLElement[] {
   ) as HTMLElement[];
 }
 
+// By name rather than by position: the list is ordered by save time, and two
+// tools seeded in the same millisecond can come back either way round.
+function rowFor(name: string): HTMLElement {
+  const row = rows().find((node) => node.textContent?.includes(name));
+  if (!row) throw new Error(`no row for ${name}`);
+  return row;
+}
+
 function buttonByText(text: string): HTMLButtonElement | undefined {
   return [...document.querySelectorAll('button')].find((node) =>
     node.textContent?.includes(text),
@@ -122,7 +130,7 @@ describe('with fake data seeded', () => {
   it('deletes one tool without touching the other', () => {
     const view = mount();
 
-    click(rows()[0]?.querySelector('button'));
+    click(rowFor('Focus & Pomodoro Timer').querySelector('button'));
 
     expect(getItem(POMODORO_KEY, null)).toBeNull();
     expect(getItem(HABIT_KEY, null)).not.toBeNull();
@@ -131,7 +139,7 @@ describe('with fake data seeded', () => {
 
   it('drops the row for a deleted tool', () => {
     const view = mount();
-    click(rows()[0]?.querySelector('button'));
+    click(rowFor('Focus & Pomodoro Timer').querySelector('button'));
 
     expect(rows()).toHaveLength(1);
     view.unmount();
