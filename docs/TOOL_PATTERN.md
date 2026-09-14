@@ -108,6 +108,26 @@ whole, so functions stay out of it. `storage-summary.test.ts` checks the flag
 and the map against each other. Do this when the data model is written, not
 later.
 
+## Values that change on their own
+
+A clock, a countdown, anything reading `Date.now()`: the server has no "now"
+that survives to the browser, so rendering one guarantees a mismatch a moment
+later. Use `useNowSeconds` from `@/hooks/use-now`, which returns 0 on the server
+and whole seconds on the client through `useSyncExternalStore`. Render a waiting
+line for 0 rather than a time.
+
+The same shape works for anything the browser knows and the server does not.
+Reading it in an effect and calling setState trips
+`react-hooks/set-state-in-effect`; a store with a server snapshot does not.
+
+## Data that goes out of date
+
+Some data cannot be derived and is announced instead — Thai lunar holidays,
+substitution days, platform image sizes. Ship what is certain, say in the page
+exactly what is missing and why, and give the reader a way to supply the rest.
+A plausible guess is worse than an honest gap, because nobody checks a number
+that looks right.
+
 ## Errors
 
 Parsing returns a discriminated result, never `null`:
