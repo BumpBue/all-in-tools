@@ -198,8 +198,8 @@ export const PRODUCTIVITY_TOOLS: readonly ToolDefinition[] = [
     slug: 'word-counter',
     name: { th: 'นับคำและเวลาอ่าน', en: 'Word & Reading Time Counter' },
     description: {
-      th: 'นับจำนวนคำ ตัวอักษร ประโยค และย่อหน้า พร้อมประมาณเวลาที่ใช้อ่าน รองรับภาษาไทย',
-      en: 'Count words, characters, sentences and paragraphs, and estimate reading time.',
+      th: 'นับคำ ตัวอักษร ประโยค และย่อหน้า ตัดคำไทยจริงด้วย Intl.Segmenter พร้อมเวลาอ่าน เวลาพูด และคำที่พบบ่อย',
+      en: 'Count words, characters, sentences and paragraphs with real Thai word segmentation, plus reading time, speaking time and word frequency.',
     },
     keywords: [
       'นับคำ',
@@ -217,7 +217,7 @@ export const PRODUCTIVITY_TOOLS: readonly ToolDefinition[] = [
     category: 'productivity',
     tier: 'A',
     icon: 'FileText',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
