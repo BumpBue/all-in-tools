@@ -144,8 +144,8 @@ export const FINANCE_TOOLS: readonly ToolDefinition[] = [
     slug: 'date-calculator',
     name: { th: 'คำนวณวันเวลา', en: 'Date Calculator' },
     description: {
-      th: 'หาจำนวนวันระหว่างสองวันที่ บวกลบวันจากวันตั้งต้น และแปลงระหว่าง พ.ศ. กับ ค.ศ.',
-      en: 'Find the span between two dates, add or subtract days, and convert Buddhist and Gregorian years.',
+      th: 'หาจำนวนวันระหว่างสองวันที่ บวกลบวัน และนับวันทำการโดยหักเสาร์อาทิตย์กับวันหยุดราชการไทย พร้อมแสดง พ.ศ.',
+      en: 'Find the span between two dates, add or subtract time, and count working days with weekends and Thai public holidays removed.',
     },
     keywords: [
       'คำนวณวัน',
@@ -160,11 +160,14 @@ export const FINANCE_TOOLS: readonly ToolDefinition[] = [
       'add days',
       'buddhist year',
       'age',
+      'วันทำการ',
+      'วันหยุดราชการ',
+      'working days',
     ],
     category: 'finance',
     tier: 'A',
     icon: 'CalendarDays',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
