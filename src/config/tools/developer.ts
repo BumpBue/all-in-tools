@@ -331,8 +331,8 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
     slug: 'uuid-generator',
     name: { th: 'สร้าง UUID / รหัสสุ่ม', en: 'UUID & Random ID Generator' },
     description: {
-      th: 'สร้าง UUID v4 และรหัสสุ่มที่ปลอดภัยทีละหลายรายการ คัดลอกไปใช้ได้ทั้งชุด',
-      en: 'Generate UUID v4 values and cryptographically secure random IDs in bulk.',
+      th: 'สร้าง UUID v4, UUID v7 ที่เรียงตามเวลา, nanoid และรหัสสุ่มที่กำหนดชุดอักขระเองได้ ทีละมากถึงพันรายการ',
+      en: 'Generate UUID v4, time-ordered UUID v7, nanoid and custom-alphabet random IDs, up to a thousand at a time.',
     },
     keywords: [
       'ยูยูไอดี',
@@ -345,12 +345,13 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
       'nanoid',
       'random id',
       'v4',
+      'v7',
       'token',
     ],
     category: 'developer',
     tier: 'A',
     icon: 'Fingerprint',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
 ];

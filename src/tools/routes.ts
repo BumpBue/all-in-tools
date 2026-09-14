@@ -6,7 +6,7 @@
  * tool registered there ships to every tool page. Keep this list in step with
  * the directories; routes.test.ts checks it against the filesystem.
  */
-export const TOOLS_WITH_OWN_ROUTE: readonly string[] = ['base-converter', 'base64', 'url-encoder', 'hash-generator'];
+export const TOOLS_WITH_OWN_ROUTE: readonly string[] = ['base-converter', 'base64', 'url-encoder', 'hash-generator', 'uuid-generator'];
 
 const OWN_ROUTES = new Set(TOOLS_WITH_OWN_ROUTE);
 
