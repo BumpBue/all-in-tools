@@ -16,6 +16,20 @@ src/tools/<slug>/
 rendering, and it is where the real behaviour lives. `index.tsx` should read as
 wiring: state, layout, and calls into `logic.ts`.
 
+A tool may add files beside those three — a worker, a hook, a data file — but
+only for itself. Data the tool reads from but never computes (a word bank, a
+cheatsheet) belongs in its own file, so `logic.ts` stays logic.
+
+## Code two tools share
+
+When a second tool needs something a first one already has, move it to
+`src/lib/` and import it from both. Never import across tool folders: the two
+would be wired together for no reason, and the reader of either one would have
+to go looking. `src/lib/color.ts` and `src/lib/datetime.ts` came about this
+way, the second of them after 543 had been written out twice. Its tests move
+with it. Nothing is lost in the bundle: `src/lib` modules still land only in
+the chunks of the routes that import them.
+
 ## Registering
 
 A tool gets its own route. That is what splits its code: everything reachable
@@ -99,6 +113,15 @@ swallow it.
 
 A tool uses one or the other, rarely both.
 
+**Neither**, for a tool handling something the reader would not want kept. The
+JWT decoder takes a credential and the secret that checks it, so its route
+takes no `searchParams` at all — the argument is not accepted rather than
+accepted and ignored — it writes no storage, and its clear button drops the
+secret too. Say so on the page, and test it: `jwt-decoder/index.test.tsx`
+asserts that after typing both, `location.search` is still empty and
+`localStorage` is still empty. A promise made in prose is worth what the test
+that holds it to it is worth.
+
 A Tier C tool with a real data model also declares how its items are counted, or
 the settings page will report something meaningless: a habit tracker holding
 `{ habits: [...], logs: {...} }` reads as two items by default. Set
@@ -119,6 +142,67 @@ line for 0 rather than a time.
 The same shape works for anything the browser knows and the server does not.
 Reading it in an effect and calling setState trips
 `react-hooks/set-state-in-effect`; a store with a server snapshot does not.
+
+## Work that can hang the page
+
+Some work cannot be interrupted once it starts. A backtracking regular
+expression is the clearest case: `/^(a+)+$/` against forty characters and a
+mismatch will not return in this lifetime, and no amount of checking a flag
+will stop it, because nothing between the engine and the flag ever runs.
+
+The only escape is to run it on another thread and destroy that thread. The
+shape is in `regex-tester`:
+
+- `worker.ts` is thin. It reads a message, calls into `logic.ts`, posts the
+  answer back. Everything worth testing stays in `logic.ts`, which the worker
+  and the page both import, so it is one module in the bundle rather than two.
+- The hook keeps the worker between requests and starts a deadline with each
+  one. On the deadline it calls `terminate()` and drops the reference, so the
+  next request builds a fresh worker.
+- **Every request carries an id and every answer carries it back.** A worker
+  that is reused answers in order, so without the id a slow answer to what was
+  typed a second ago is read as the answer to what is on screen now. A test
+  caught this; it was not obvious.
+- Say what happened. A deadline that passes silently looks like a broken tool,
+  so the timeout explains what catastrophic backtracking is and that the page
+  stayed responsive because the work was never on this thread.
+
+Take the factory that builds the worker as an option. happy-dom has no
+`Worker`, so the hook's tests pass in a stub that never answers, which is how
+the deadline gets tested at all.
+
+Where nothing can be moved off the thread, bound the work instead and say which
+bound was hit. `text-diff` refuses input past a length, a token count, and a
+number of differences, each with its own message, rather than letting Myers'
+trace grow until the tab dies.
+
+## Anything that draws randomness
+
+`crypto.getRandomValues` cannot be called while rendering: the server would
+draw one number, the browser another, and the two would disagree. Draw the seed
+in an event handler, keep it in state, and let the render be a pure function of
+it. `thai-lorem-ipsum` does this — the button draws a seed, and every option
+changed after that regenerates from the same one. A seed the reader can type is
+then just the same value from a different source, and it makes the output
+reproducible for free.
+
+`Math.random` is not used anywhere in this project.
+
+## Async work in a hook
+
+Two rules, both learned the hard way:
+
+**Depend on primitives, never on the object.** A hook that takes a decoded
+token or a request object and lists it in the dependency array re-runs on every
+render, because the object is rebuilt on every render. Pull the fields out and
+depend on those.
+
+**Decide "is this answer still wanted" by comparing a key, not by a flag set
+during the effect.** Both `useRegexWorker` and `useVerify` keep
+`{ key, result }` in one piece of state, where the key is the serialized input
+that produced it. The status is then derived — the answer is current when its
+key matches what is on screen now — and no state is ever set from an effect
+body, which is both a lint error and a second render of the same commit.
 
 ## Data that goes out of date
 
@@ -200,8 +284,26 @@ through a shell may be normalized before it lands. Use `BigInt` literals and
 `\uXXXX` escapes so a test exercises what it claims to. Each of those has
 already produced a test here that passed while checking nothing.
 
+For an algorithm with a property that must always hold, test the property over
+generated input rather than listing cases. `text-diff` runs two hundred random
+pairs through the diff and rebuilds both sides from the result: whatever the
+edit script says, the left side must come back exactly and so must the right.
+That is what proves the backtrack never loses or invents a token, and no list
+of hand-written examples would have. Seed the generator so a failure can be
+re-run.
+
 Interactive behaviour worth a test goes in a `*.test.tsx` beside the component
-using `@/test/react`; see `command-palette.test.tsx`.
+using `@/test/react`; see `command-palette.test.tsx`. Two traps there:
+
+- Every DOM event has to go through `act()`, including one dispatched by hand.
+  Outside it the render it causes is never flushed, and the assertion reads a
+  page from before the event.
+- `settle()` flushes microtasks, which is not enough for WebCrypto. Use
+  `settleTasks()` for anything that waits on a real task.
+
+Select a row by what it says, not by its index, wherever the order is derived
+from data. A list sorted by save time has ties, and a test that clicks
+`rows()[0]` is a test that passes until the clock ticks mid-test.
 
 ## Accessibility
 
