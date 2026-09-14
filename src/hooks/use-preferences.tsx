@@ -5,6 +5,7 @@ import {
   createContext,
   useCallback,
   useContext,
+  useEffect,
   useMemo,
   useState,
   type ReactNode,
@@ -18,7 +19,7 @@ import {
   writeClientCookie,
   type Preferences,
 } from '@/lib/cookies';
-import { applyTheme } from '@/lib/theme';
+import { DARK_MEDIA_QUERY, applyTheme } from '@/lib/theme';
 import type { Locale, Theme } from '@/types/tool';
 
 export interface PreferencesApi extends Preferences {
@@ -42,6 +43,15 @@ export function PreferencesProvider({
 }) {
   const router = useRouter();
   const [preferences, setPreferences] = useState(initial);
+
+  useEffect(() => {
+    if (preferences.theme !== 'system') return;
+
+    const media = window.matchMedia(DARK_MEDIA_QUERY);
+    const onChange = () => applyTheme('system');
+    media.addEventListener('change', onChange);
+    return () => media.removeEventListener('change', onChange);
+  }, [preferences.theme]);
 
   // Server Components rendered from these cookies keep their old output until
   // the router re-fetches them.

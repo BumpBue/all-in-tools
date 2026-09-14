@@ -17,3 +17,8 @@ export function applyTheme(theme: Theme): void {
   root.classList.toggle(DARK_CLASS, resolveTheme(theme) === 'dark');
   root.setAttribute(THEME_ATTRIBUTE, theme);
 }
+
+// The server sets the class from the theme cookie, which covers light and dark.
+// Only "system" needs the client, because the server cannot know the OS
+// preference. Runs before first paint, so there is nothing to flash.
+export const THEME_INIT_SCRIPT = `(function(){try{var r=document.documentElement;if(r.getAttribute('${THEME_ATTRIBUTE}')!=='system')return;r.classList.toggle('${DARK_CLASS}',window.matchMedia('${DARK_MEDIA_QUERY}').matches)}catch(e){}})();`;
