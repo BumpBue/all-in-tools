@@ -55,7 +55,7 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
     category: 'developer',
     tier: 'B',
     icon: 'Database',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
