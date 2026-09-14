@@ -10,6 +10,7 @@ const TH = {
     home: 'หน้าแรก',
     settings: 'ตั้งค่า',
     categories: 'หมวดหมู่',
+    menu: 'เมนู',
   },
   search: {
     trigger: 'ค้นหาเครื่องมือ',
@@ -59,6 +60,7 @@ const EN: Dictionary = {
     home: 'Home',
     settings: 'Settings',
     categories: 'Categories',
+    menu: 'Menu',
   },
   search: {
     trigger: 'Search tools',

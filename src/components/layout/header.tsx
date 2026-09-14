@@ -1,20 +1,21 @@
 'use client';
 
 import Link from 'next/link';
-import { Monitor, Moon, Search, Settings, Sun } from 'lucide-react';
+import { Monitor, Moon, Search, Sun } from 'lucide-react';
 
+import { SiteMenu } from '@/components/layout/site-menu';
 import { Toggle, type ToggleOption } from '@/components/ui/toggle';
+import { useIsMac } from '@/hooks/use-is-mac';
 import { usePreferences } from '@/hooks/use-preferences';
 import { useT } from '@/hooks/use-t';
 import type { Theme } from '@/types/tool';
 
 const ICON_SIZE = 16;
-const SHORTCUT_HINT = '⌘K';
-const LOCALE_LABELS = { th: 'TH', en: 'EN' } as const;
 
 export function Header({ onOpenSearch }: { onOpenSearch?: () => void }) {
   const t = useT();
-  const { theme, locale, setTheme, setLocale } = usePreferences();
+  const { theme, setTheme } = usePreferences();
+  const isMac = useIsMac();
 
   const themeOptions: ReadonlyArray<ToggleOption<Theme>> = [
     { value: 'light', label: t.theme.light, icon: <Sun size={ICON_SIZE} aria-hidden /> },
@@ -37,15 +38,19 @@ export function Header({ onOpenSearch }: { onOpenSearch?: () => void }) {
           Toolbox
         </Link>
 
+        {/* Below sm the trigger is an icon only; a text field that narrow is
+            unusable and the palette provides the real input anyway. */}
         <button
           type="button"
           onClick={onOpenSearch}
-          className="flex h-9 min-w-0 flex-1 items-center gap-2 rounded-control border border-border bg-surface px-3 text-sm text-muted transition-colors hover:border-border-strong"
+          aria-label={t.search.trigger}
+          title={t.search.trigger}
+          className="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-control text-muted transition-colors hover:bg-surface-subtle hover:text-foreground sm:ml-0 sm:h-9 sm:w-auto sm:min-w-0 sm:flex-1 sm:justify-start sm:gap-2 sm:border sm:border-border sm:bg-surface sm:px-3 sm:text-sm sm:hover:border-border-strong sm:hover:bg-surface"
         >
           <Search size={ICON_SIZE} aria-hidden />
-          <span className="truncate">{t.search.trigger}</span>
+          <span className="hidden truncate sm:inline">{t.search.placeholder}</span>
           <kbd className="ml-auto hidden shrink-0 rounded border border-border px-1.5 py-0.5 font-mono text-xs sm:inline">
-            {SHORTCUT_HINT}
+            {isMac ? '⌘K' : 'Ctrl K'}
           </kbd>
         </button>
 
@@ -57,24 +62,7 @@ export function Header({ onOpenSearch }: { onOpenSearch?: () => void }) {
           className="shrink-0"
         />
 
-        <button
-          type="button"
-          onClick={() => setLocale(locale === 'th' ? 'en' : 'th')}
-          aria-label={t.language.label}
-          title={t.language.label}
-          className="inline-flex h-8 shrink-0 items-center rounded-control border border-border px-2 font-mono text-xs font-medium text-muted transition-colors hover:border-border-strong hover:text-foreground"
-        >
-          {LOCALE_LABELS[locale]}
-        </button>
-
-        <Link
-          href="/settings"
-          aria-label={t.nav.settings}
-          title={t.nav.settings}
-          className="inline-flex size-8 shrink-0 items-center justify-center rounded-control text-muted transition-colors hover:bg-surface-subtle hover:text-foreground"
-        >
-          <Settings size={ICON_SIZE} aria-hidden />
-        </Link>
+        <SiteMenu />
       </div>
     </header>
   );
