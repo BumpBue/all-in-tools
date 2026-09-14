@@ -106,10 +106,10 @@ export const PRODUCTIVITY_TOOLS: readonly ToolDefinition[] = [
       'calculator',
     ],
     category: 'productivity',
-    tier: 'C',
+    tier: 'A',
     icon: 'Target',
-    status: 'planned',
-    needsStorage: true,
+    status: 'ready',
+    needsStorage: false,
   },
   {
     id: 5,
