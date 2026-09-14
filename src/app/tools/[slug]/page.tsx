@@ -1,37 +1,17 @@
 import type { Metadata } from 'next';
-import { createElement } from 'react';
-import Link from 'next/link';
-import { notFound } from 'next/navigation';
-import { Hammer } from 'lucide-react';
 
-import { JsonLd } from '@/components/json-ld';
-import { RecordRecent } from '@/components/tool/record-recent';
-import { ToolShell } from '@/components/tool/tool-shell';
-import { buttonClasses } from '@/components/ui/button';
-import { EmptyState } from '@/components/ui/card';
-import { getMessages } from '@/config/i18n';
-import { RELATED_TOOLS_COUNT, SITE_NAME, SITE_URL } from '@/config/site';
-import { TOOLS, getRelatedTools, getTool } from '@/config/tools';
-import { getToolComponent } from '@/tools/registry';
-import { readPreferences } from '@/lib/cookies.server';
-
-const EMPTY_ICON_SIZE = 28;
-const APPLICATION_CATEGORY = 'UtilitiesApplication';
+import { ToolPage, buildToolMetadata } from '@/app/tools/_shared/tool-page';
+import { TOOLS } from '@/config/tools';
+import { hasOwnRoute } from '@/tools/routes';
 
 type ToolParams = { slug: string };
-type ToolQuery = Record<string, string | string[] | undefined>;
 
-function firstValues(query: ToolQuery): Record<string, string> {
-  return Object.fromEntries(
-    Object.entries(query).flatMap(([key, value]) => {
-      const single = Array.isArray(value) ? value[0] : value;
-      return single === undefined ? [] : [[key, single]];
-    }),
-  );
-}
-
+// Tools with a route of their own are served by that static segment, which
+// always wins over this dynamic one.
 export function generateStaticParams(): ToolParams[] {
-  return TOOLS.map((tool) => ({ slug: tool.slug }));
+  return TOOLS.filter((tool) => !hasOwnRoute(tool.slug)).map((tool) => ({
+    slug: tool.slug,
+  }));
 }
 
 export async function generateMetadata({
@@ -40,84 +20,10 @@ export async function generateMetadata({
   params: Promise<ToolParams>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const tool = getTool(slug);
-  if (!tool) return {};
-
-  const { locale } = await readPreferences();
-  const title = `${tool.name[locale]} — ${SITE_NAME}`;
-  const description = tool.description[locale];
-  const url = `/tools/${tool.slug}`;
-
-  return {
-    title,
-    description,
-    keywords: tool.keywords,
-    alternates: { canonical: url },
-    openGraph: { title, description, url, type: 'website', siteName: SITE_NAME },
-    twitter: { card: 'summary', title, description },
-  };
+  return buildToolMetadata(slug);
 }
 
-export default async function ToolPage({
-  params,
-  searchParams,
-}: {
-  params: Promise<ToolParams>;
-  searchParams: Promise<ToolQuery>;
-}) {
+export default async function Page({ params }: { params: Promise<ToolParams> }) {
   const { slug } = await params;
-  const tool = getTool(slug);
-  if (!tool) notFound();
-
-  const { locale } = await readPreferences();
-  const t = getMessages(locale);
-  const related = getRelatedTools(tool, RELATED_TOOLS_COUNT);
-  // A stable reference out of a module-level map, not a component built during
-  // render; createElement keeps that obvious to the lint rule and the reader.
-  const toolComponent =
-    tool.status === 'ready' ? getToolComponent(tool.slug) : undefined;
-  const query = firstValues(await searchParams);
-
-  return (
-    <>
-      <JsonLd
-        data={{
-          '@context': 'https://schema.org',
-          '@type': 'SoftwareApplication',
-          name: tool.name[locale],
-          description: tool.description[locale],
-          url: `${SITE_URL}/tools/${tool.slug}`,
-          applicationCategory: APPLICATION_CATEGORY,
-          operatingSystem: 'Any',
-          browserRequirements: 'Requires JavaScript',
-          keywords: tool.keywords.join(', '),
-          isAccessibleForFree: true,
-          offers: { '@type': 'Offer', price: '0', priceCurrency: 'THB' },
-        }}
-      />
-
-      {/* Only tools that actually work are worth putting in the recent list. */}
-      {toolComponent ? <RecordRecent slug={tool.slug} /> : null}
-
-      <ToolShell tool={tool} related={related} locale={locale}>
-        {toolComponent ? (
-          createElement(toolComponent, { searchParams: query })
-        ) : (
-          <EmptyState
-            icon={<Hammer size={EMPTY_ICON_SIZE} aria-hidden />}
-            title={t.tool.comingSoon}
-            description={t.tool.notReady}
-            action={
-              <Link
-                href={`/category/${tool.category}`}
-                className={buttonClasses({ variant: 'secondary', size: 'sm' })}
-              >
-                {t.tool.backToCategory}
-              </Link>
-            }
-          />
-        )}
-      </ToolShell>
-    </>
-  );
+  return <ToolPage slug={slug} />;
 }
