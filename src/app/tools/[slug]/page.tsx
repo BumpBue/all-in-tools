@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { createElement } from 'react';
 import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Hammer } from 'lucide-react';
@@ -11,12 +12,23 @@ import { EmptyState } from '@/components/ui/card';
 import { getMessages } from '@/config/i18n';
 import { RELATED_TOOLS_COUNT, SITE_NAME, SITE_URL } from '@/config/site';
 import { TOOLS, getRelatedTools, getTool } from '@/config/tools';
+import { getToolComponent } from '@/tools/registry';
 import { readPreferences } from '@/lib/cookies.server';
 
 const EMPTY_ICON_SIZE = 28;
 const APPLICATION_CATEGORY = 'UtilitiesApplication';
 
 type ToolParams = { slug: string };
+type ToolQuery = Record<string, string | string[] | undefined>;
+
+function firstValues(query: ToolQuery): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(query).flatMap(([key, value]) => {
+      const single = Array.isArray(value) ? value[0] : value;
+      return single === undefined ? [] : [[key, single]];
+    }),
+  );
+}
 
 export function generateStaticParams(): ToolParams[] {
   return TOOLS.map((tool) => ({ slug: tool.slug }));
@@ -48,8 +60,10 @@ export async function generateMetadata({
 
 export default async function ToolPage({
   params,
+  searchParams,
 }: {
   params: Promise<ToolParams>;
+  searchParams: Promise<ToolQuery>;
 }) {
   const { slug } = await params;
   const tool = getTool(slug);
@@ -58,6 +72,11 @@ export default async function ToolPage({
   const { locale } = await readPreferences();
   const t = getMessages(locale);
   const related = getRelatedTools(tool, RELATED_TOOLS_COUNT);
+  // A stable reference out of a module-level map, not a component built during
+  // render; createElement keeps that obvious to the lint rule and the reader.
+  const toolComponent =
+    tool.status === 'ready' ? getToolComponent(tool.slug) : undefined;
+  const query = firstValues(await searchParams);
 
   return (
     <>
@@ -78,11 +97,11 @@ export default async function ToolPage({
       />
 
       {/* Only tools that actually work are worth putting in the recent list. */}
-      {tool.status === 'ready' ? <RecordRecent slug={tool.slug} /> : null}
+      {toolComponent ? <RecordRecent slug={tool.slug} /> : null}
 
       <ToolShell tool={tool} related={related} locale={locale}>
-        {tool.status === 'ready' ? (
-          <p className="text-sm text-muted">{t.tool.uiPending}</p>
+        {toolComponent ? (
+          createElement(toolComponent, { searchParams: query })
         ) : (
           <EmptyState
             icon={<Hammer size={EMPTY_ICON_SIZE} aria-hidden />}
