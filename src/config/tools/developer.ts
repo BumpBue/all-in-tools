@@ -326,7 +326,7 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
     category: 'developer',
     tier: 'A',
     icon: 'Diff',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
