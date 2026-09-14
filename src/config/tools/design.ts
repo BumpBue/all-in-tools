@@ -88,8 +88,8 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
     slug: 'contrast-checker',
     name: { th: 'ตรวจ Contrast สำหรับธีมมืด', en: 'Contrast Checker' },
     description: {
-      th: 'ตรวจค่าคอนทราสต์ตามมาตรฐาน WCAG ว่าตัวอักษรอ่านออกไหม ทั้งในธีมสว่างและธีมมืด',
-      en: 'Check WCAG contrast ratios to confirm text stays readable in both light and dark themes.',
+      th: 'ตรวจคอนทราสต์ทั้งแบบ WCAG 2.x และ APCA พร้อมหาสีที่ใกล้ที่สุดที่ผ่านเกณฑ์ และตรวจชุดสีทั้งชุดพร้อมกัน',
+      en: 'Check contrast by both WCAG 2.x and APCA, find the nearest colour that passes, and check a whole palette at once.',
     },
     keywords: [
       'คอนทราสต์',
@@ -103,11 +103,13 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
       'a11y',
       'ratio',
       'dark mode',
+      'apca',
+      'lc',
     ],
     category: 'design',
     tier: 'A',
     icon: 'Contrast',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
