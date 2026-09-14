@@ -246,7 +246,7 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
     category: 'developer',
     tier: 'B',
     icon: 'FileCode',
-    status: 'planned',
+    status: 'ready',
     needsStorage: true,
   },
   {
