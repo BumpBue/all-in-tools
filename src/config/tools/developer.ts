@@ -197,8 +197,8 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
     slug: 'hash-generator',
     name: { th: 'สร้าง Hash', en: 'Hash Generator' },
     description: {
-      th: 'สร้างค่าแฮช SHA-1, SHA-256, SHA-384 และ SHA-512 จากข้อความ โดยใช้ Web Crypto ในเบราว์เซอร์',
-      en: 'Produce SHA-1, SHA-256, SHA-384 and SHA-512 digests from text using the browser Web Crypto API.',
+      th: 'สร้างค่าแฮช MD5, SHA-1, SHA-256, SHA-384 และ SHA-512 จากข้อความหรือไฟล์ ในเบราว์เซอร์ของคุณเอง',
+      en: 'Produce MD5, SHA-1, SHA-256, SHA-384 and SHA-512 digests from text or a file, in your own browser.',
     },
     keywords: [
       'แฮช',
@@ -209,6 +209,7 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
       'sha256',
       'sha-1',
       'sha512',
+      'md5',
       'digest',
       'checksum',
       'crypto',
@@ -216,7 +217,7 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
     category: 'developer',
     tier: 'A',
     icon: 'Hash',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
