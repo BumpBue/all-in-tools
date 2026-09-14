@@ -88,3 +88,36 @@ export function click(target: Element | null | undefined): void {
     (target as HTMLElement | null)?.click();
   });
 }
+
+/** Flush promises and the renders they trigger. */
+export async function settle(): Promise<void> {
+  await act(async () => {
+    await Promise.resolve();
+  });
+}
+
+export function jsonFile(name: string, contents: string, type = 'application/json'): File {
+  return new File([contents], name, { type });
+}
+
+export function chooseFile(input: HTMLInputElement, file: File): void {
+  const transfer = new DataTransfer();
+  transfer.items.add(file);
+
+  act(() => {
+    input.files = transfer.files;
+    input.dispatchEvent(new Event('change', { bubbles: true }));
+  });
+}
+
+export function dropFile(target: Element, file: File): void {
+  const transfer = new DataTransfer();
+  transfer.items.add(file);
+
+  const event = new Event('drop', { bubbles: true, cancelable: true });
+  Object.defineProperty(event, 'dataTransfer', { value: transfer });
+
+  act(() => {
+    target.dispatchEvent(event);
+  });
+}
