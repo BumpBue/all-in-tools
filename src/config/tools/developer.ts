@@ -269,7 +269,7 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
     category: 'developer',
     tier: 'A',
     icon: 'ArrowLeftRight',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
