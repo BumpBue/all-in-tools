@@ -32,8 +32,8 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
     slug: 'aspect-ratio',
     name: { th: 'คำนวณอัตราส่วนภาพ', en: 'Aspect Ratio Calculator' },
     description: {
-      th: 'หาขนาดกว้างยาวที่ยังคงอัตราส่วนเดิม เช่น 16:9 หรือ 4:3 โดยใส่ด้านเดียวแล้วได้อีกด้าน',
-      en: 'Find matching width and height for a ratio such as 16:9 or 4:3 from a single dimension.',
+      th: 'หาขนาดกว้างยาวที่คงอัตราส่วนเดิม พร้อมขนาดจริงของ Instagram, Facebook, YouTube, TikTok และ X และบอกว่าปัดเป็นจำนวนเต็มแล้วเพี้ยนเท่าไร',
+      en: 'Keep a ratio while resizing, with the real pixel sizes for Instagram, Facebook, YouTube, TikTok and X, and how far whole pixels drift from the ratio.',
     },
     keywords: [
       'อัตราส่วน',
@@ -50,7 +50,7 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
     category: 'design',
     tier: 'A',
     icon: 'Proportions',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
