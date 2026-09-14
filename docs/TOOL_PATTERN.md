@@ -211,6 +211,39 @@ that produced it. The status is then derived — the answer is current when its
 key matches what is on screen now — and no state is ever set from an effect
 body, which is both a lint error and a second render of the same commit.
 
+## Before a tool counts as done
+
+**Fetch the built page once.** `pnpm build` passing is not evidence that the
+page serves. Run `next start` and fetch the route: markdown-preview built
+cleanly and answered 500, because DOMPurify on the server is not a sanitizer
+but an object with no `sanitize` method. Nothing in the build, the types or the
+tests said so.
+
+Any tool touching a browser-only API — `window`, `document`, `crypto.subtle`,
+`Worker`, `OffscreenCanvas`, `createImageBitmap`, a library that needs a DOM —
+has to survive being rendered on the server. Usually that means returning
+nothing there rather than guarding at the call site, since the server has no
+reader input to work with anyway.
+
+This is the same step that measures the page's gzipped size, so it costs
+nothing extra.
+
+## Testing anything that touches HTML
+
+**A tool that sanitizes or parses HTML is tested under jsdom, never happy-dom.**
+
+DOMPurify under happy-dom is not a sanitizer. With its default options it
+strips `<h1>` and `<table>` while leaving a `javascript:` href untouched, and
+`DOMPurify.isSupported` still answers `true`. Tests written there would have
+proved the sanitizer worked while it was letting an XSS through.
+
+Put `// @vitest-environment jsdom` at the top of the file. jsdom is a dev
+dependency and ships nothing. happy-dom stays the default everywhere else: it
+starts faster and is fine for ordinary components.
+
+The wider rule: when a test environment disagrees with a browser about a
+security boundary, the test environment is the thing to change.
+
 ## Data that goes out of date
 
 Some data cannot be derived and is announced instead — Thai lunar holidays,
