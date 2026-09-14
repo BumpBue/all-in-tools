@@ -58,8 +58,8 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
     slug: 'color-converter',
     name: { th: 'แปลงรหัสสี', en: 'Color Converter' },
     description: {
-      th: 'แปลงรหัสสีระหว่าง HEX, RGB, HSL และ OKLCH พร้อมดูตัวอย่างสีจริงและคัดลอกทุกรูปแบบ',
-      en: 'Convert colours between HEX, RGB, HSL and OKLCH with a live swatch and copyable values.',
+      th: 'แปลงรหัสสีระหว่าง HEX, RGB, HSL, HSV, OKLCH และ CMYK พร้อมสร้างชุดสีอ่อนเข้มและสีคู่ตรงข้ามเป็น CSS variable',
+      en: 'Convert between HEX, RGB, HSL, HSV, OKLCH and CMYK, and build tint, shade and harmony palettes as CSS variables.',
     },
     keywords: [
       'รหัสสี',
@@ -71,13 +71,16 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
       'rgb',
       'hsl',
       'oklch',
+      'cmyk',
+      'hsv',
       'color converter',
       'color picker',
+      'palette',
     ],
     category: 'design',
     tier: 'A',
     icon: 'Palette',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
