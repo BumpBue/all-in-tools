@@ -287,7 +287,9 @@ export function importAll(json: string, mode: ImportMode = 'merge'): ImportResul
     }
   }
 
-  if (mode === 'replace') {
+  // Pruning only after every write landed keeps a partial import from deleting
+  // data that was not replaced.
+  if (mode === 'replace' && writeErrors.length === 0) {
     for (const key of listToolKeys()) {
       if (!incomingKeys.has(key)) storage.removeItem(key);
     }
