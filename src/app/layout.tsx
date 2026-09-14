@@ -3,6 +3,7 @@ import { IBM_Plex_Mono, IBM_Plex_Sans_Thai } from 'next/font/google';
 
 import '@/app/globals.css';
 
+import { CommandPaletteProvider } from '@/components/command-palette/provider';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import { getMessages } from '@/config/i18n';
@@ -60,20 +61,25 @@ export default async function RootLayout({
       </head>
       <body className="flex min-h-dvh flex-col">
         <PreferencesProvider initial={preferences}>
-          <a
-            href={`#${MAIN_ID}`}
-            className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-control focus:bg-accent focus:px-4 focus:py-2 focus:text-on-accent"
-          >
-            {t.skipToContent}
-          </a>
+          <CommandPaletteProvider>
+            <a
+              href={`#${MAIN_ID}`}
+              className="sr-only focus:not-sr-only focus:absolute focus:top-3 focus:left-3 focus:z-50 focus:rounded-control focus:bg-accent focus:px-4 focus:py-2 focus:text-on-accent"
+            >
+              {t.skipToContent}
+            </a>
 
-          <Header />
+            <Header />
 
-          <main id={MAIN_ID} className="mx-auto w-full max-w-content flex-1 px-4 py-8">
-            {children}
-          </main>
+            <main
+              id={MAIN_ID}
+              className="mx-auto w-full max-w-content flex-1 px-4 py-8"
+            >
+              {children}
+            </main>
 
-          <Footer />
+            <Footer />
+          </CommandPaletteProvider>
         </PreferencesProvider>
       </body>
     </html>

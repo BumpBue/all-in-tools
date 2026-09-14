@@ -16,6 +16,12 @@ const TH = {
     trigger: 'ค้นหาเครื่องมือ',
     placeholder: 'พิมพ์ชื่อเครื่องมือที่ต้องการ',
     empty: 'ไม่พบเครื่องมือที่ตรงกับคำค้น',
+    emptyHint: 'ลองพิมพ์คำอื่น เช่น ชื่อภาษาอังกฤษหรือสิ่งที่อยากทำ',
+    results: 'พบ {count} เครื่องมือ',
+    close: 'ปิดการค้นหา',
+    hintNavigate: 'เลื่อน',
+    hintSelect: 'เปิด',
+    hintClose: 'ปิด',
   },
   theme: {
     label: 'ธีม',
@@ -66,6 +72,12 @@ const EN: Dictionary = {
     trigger: 'Search tools',
     placeholder: 'Type the name of a tool',
     empty: 'No tool matches that search',
+    emptyHint: 'Try another word, such as an English name or what you want to do',
+    results: 'Found {count} tools',
+    close: 'Close search',
+    hintNavigate: 'Navigate',
+    hintSelect: 'Open',
+    hintClose: 'Close',
   },
   theme: {
     label: 'Theme',
@@ -106,6 +118,15 @@ export function getMessages(locale: Locale): Dictionary {
 
 export function pick(text: LocalizedText, locale: Locale): string {
   return text[locale];
+}
+
+export function format(
+  template: string,
+  values: Record<string, string | number>,
+): string {
+  return template.replace(/\{(\w+)\}/g, (match, key: string) =>
+    key in values ? String(values[key]) : match,
+  );
 }
 
 export type { Dictionary };

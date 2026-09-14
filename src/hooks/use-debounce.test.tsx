@@ -4,7 +4,7 @@ import { act } from 'react';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { useDebounce } from '@/hooks/use-debounce';
-import { renderHook } from '@/test/render-hook';
+import { renderHook } from '@/test/react';
 
 const DELAY_MS = 200;
 

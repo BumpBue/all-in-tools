@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { COPY_FEEDBACK_MS } from '@/config/site';
 import { useCopyToClipboard } from '@/hooks/use-copy-to-clipboard';
-import { renderHook } from '@/test/render-hook';
+import { renderHook } from '@/test/react';
 
 const TEXT = 'ฐานสิบหก';
 

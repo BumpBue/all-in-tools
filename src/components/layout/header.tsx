@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { Monitor, Moon, Search, Sun } from 'lucide-react';
 
+import { useCommandPalette } from '@/components/command-palette/provider';
 import { SiteMenu } from '@/components/layout/site-menu';
 import { Toggle, type ToggleOption } from '@/components/ui/toggle';
 import { useIsMac } from '@/hooks/use-is-mac';
@@ -12,8 +13,9 @@ import type { Theme } from '@/types/tool';
 
 const ICON_SIZE = 16;
 
-export function Header({ onOpenSearch }: { onOpenSearch?: () => void }) {
+export function Header() {
   const t = useT();
+  const { open: openSearch } = useCommandPalette();
   const { theme, setTheme } = usePreferences();
   const isMac = useIsMac();
 
@@ -42,7 +44,7 @@ export function Header({ onOpenSearch }: { onOpenSearch?: () => void }) {
             unusable and the palette provides the real input anyway. */}
         <button
           type="button"
-          onClick={onOpenSearch}
+          onClick={openSearch}
           aria-label={t.search.trigger}
           title={t.search.trigger}
           className="ml-auto inline-flex size-8 shrink-0 items-center justify-center rounded-control text-muted transition-colors hover:bg-surface-subtle hover:text-foreground sm:ml-0 sm:h-9 sm:w-auto sm:min-w-0 sm:flex-1 sm:justify-start sm:gap-2 sm:border sm:border-border sm:bg-surface sm:px-3 sm:text-sm sm:hover:border-border-strong sm:hover:bg-surface"

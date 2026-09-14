@@ -5,7 +5,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { buildToolStorageKey } from '@/config/storage-keys';
 import { useLocalStorage } from '@/hooks/use-local-storage';
 import { setItem } from '@/lib/storage';
-import { renderHook } from '@/test/render-hook';
+import { renderHook } from '@/test/react';
 
 const KEY = buildToolStorageKey('pomodoro');
 const OTHER_KEY = buildToolStorageKey('flashcards');
