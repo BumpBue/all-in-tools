@@ -91,7 +91,7 @@ export default async function CategoryPage({
         </div>
       </div>
 
-      <ToolGrid tools={tools} />
+      <ToolGrid tools={tools} locale={locale} />
     </div>
   );
 }

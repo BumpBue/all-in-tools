@@ -1,5 +1,3 @@
-'use client';
-
 import Link from 'next/link';
 import { ChevronRight } from 'lucide-react';
 import type { ReactNode } from 'react';
@@ -10,10 +8,10 @@ import { ShareLinkButton } from '@/components/tool/share-link-button';
 import { ToolGrid } from '@/components/tool/tool-grid';
 import { Badge } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
+import { getMessages } from '@/config/i18n';
 import { SITE_URL } from '@/config/site';
 import { CATEGORY_META, type Tool } from '@/config/tools';
-import { useLocale, useT } from '@/hooks/use-t';
-import { cn } from '@/lib/utils';
+import type { Locale } from '@/types/tool';
 
 const ICON_SIZE = 24;
 const CHEVRON_SIZE = 14;
@@ -21,14 +19,15 @@ const CHEVRON_SIZE = 14;
 export function ToolShell({
   tool,
   related,
+  locale,
   children,
 }: {
   tool: Tool;
   related: Tool[];
+  locale: Locale;
   children: ReactNode;
 }) {
-  const t = useT();
-  const locale = useLocale();
+  const t = getMessages(locale);
   const meta = CATEGORY_META[tool.category];
   const planned = tool.status === 'planned';
 
@@ -97,10 +96,12 @@ export function ToolShell({
         </div>
 
         <div className="flex items-center gap-2">
-          <ShareLinkButton />
+          <ShareLinkButton shareLabel={t.tool.share} copiedLabel={t.tool.linkCopied} />
           <FavoriteButton
             slug={tool.slug}
-            className={cn('border border-border', 'size-8')}
+            addLabel={t.tool.addFavorite}
+            removeLabel={t.tool.removeFavorite}
+            className="border border-border"
           />
         </div>
       </header>
@@ -110,7 +111,7 @@ export function ToolShell({
       {related.length > 0 ? (
         <section className="flex flex-col gap-4 border-t border-border pt-8">
           <h2 className="text-base font-semibold">{t.tool.related}</h2>
-          <ToolGrid tools={related} />
+          <ToolGrid tools={related} locale={locale} />
         </section>
       ) : null}
     </div>

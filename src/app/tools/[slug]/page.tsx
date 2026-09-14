@@ -79,7 +79,7 @@ export default async function ToolPage({
       {/* Only tools that actually work are worth putting in the recent list. */}
       {tool.status === 'ready' ? <RecordRecent slug={tool.slug} /> : null}
 
-      <ToolShell tool={tool} related={related}>
+      <ToolShell tool={tool} related={related} locale={locale}>
         {tool.status === 'ready' ? (
           <p className="text-sm text-muted">{t.tool.uiPending}</p>
         ) : (

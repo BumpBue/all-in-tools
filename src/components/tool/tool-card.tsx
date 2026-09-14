@@ -1,20 +1,18 @@
-'use client';
-
 import Link from 'next/link';
 import type { CSSProperties } from 'react';
 
 import { FavoriteButton } from '@/components/tool/favorite-button';
 import { Badge } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
+import { getMessages } from '@/config/i18n';
 import { CATEGORY_META, type Tool } from '@/config/tools';
-import { useLocale, useT } from '@/hooks/use-t';
 import { cn } from '@/lib/utils';
+import type { Locale } from '@/types/tool';
 
 const ICON_SIZE = 20;
 
-export function ToolCard({ tool }: { tool: Tool }) {
-  const t = useT();
-  const locale = useLocale();
+export function ToolCard({ tool, locale }: { tool: Tool; locale: Locale }) {
+  const t = getMessages(locale);
   const planned = tool.status === 'planned';
 
   return (
@@ -22,9 +20,13 @@ export function ToolCard({ tool }: { tool: Tool }) {
       style={{ '--tool-accent': CATEGORY_META[tool.category].color } as CSSProperties}
       className="relative rounded-card border border-border bg-surface transition-colors hover:border-border-strong"
     >
-      {/* The favourite button is a sibling of the link, not a child, so a click
-          on it never navigates. */}
-      <FavoriteButton slug={tool.slug} className="absolute right-2 top-2 z-10" />
+      {/* A sibling of the link, not a child, so a click on it never navigates. */}
+      <FavoriteButton
+        slug={tool.slug}
+        addLabel={t.tool.addFavorite}
+        removeLabel={t.tool.removeFavorite}
+        className="absolute right-2 top-2 z-10"
+      />
 
       <Link
         href={`/tools/${tool.slug}`}

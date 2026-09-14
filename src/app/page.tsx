@@ -35,8 +35,12 @@ export default async function HomePage() {
         <HeroSearchButton />
       </section>
 
-      <ToolSection title={t.home.recent} tools={toTools(recent)} />
-      <ToolSection title={t.home.favorites} tools={toTools(favorites)} />
+      <ToolSection title={t.home.recent} tools={toTools(recent)} locale={locale} />
+      <ToolSection
+        title={t.home.favorites}
+        tools={toTools(favorites)}
+        locale={locale}
+      />
 
       {CATEGORY_ORDER.map((category) => (
         <ToolSection
@@ -49,6 +53,7 @@ export default async function HomePage() {
             <Icon name={CATEGORY_META[category].icon} size={CATEGORY_ICON_SIZE} />
           }
           tools={TOOLS_BY_CATEGORY[category]}
+          locale={locale}
         />
       ))}
 

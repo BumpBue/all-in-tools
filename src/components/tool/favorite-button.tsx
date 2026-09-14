@@ -3,22 +3,28 @@
 import { Star } from 'lucide-react';
 
 import { usePreferences } from '@/hooks/use-preferences';
-import { useT } from '@/hooks/use-t';
 import { cn } from '@/lib/utils';
 
 const ICON_SIZE = 16;
 
+// Primitives only, never the Tool object: everything a client component takes
+// as props is serialized into the RSC payload of every page that renders it.
 export function FavoriteButton({
   slug,
+  addLabel,
+  removeLabel,
   className,
 }: {
   slug: string;
+  addLabel: string;
+  removeLabel: string;
   className?: string;
 }) {
-  const t = useT();
+  // Read from context rather than a prop so the star flips on click instead of
+  // waiting for the server round trip that router.refresh() starts.
   const { isFavorite, toggleFavorite } = usePreferences();
   const active = isFavorite(slug);
-  const label = active ? t.tool.removeFavorite : t.tool.addFavorite;
+  const label = active ? removeLabel : addLabel;
 
   return (
     <button
