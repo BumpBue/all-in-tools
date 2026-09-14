@@ -96,6 +96,13 @@ export async function settle(): Promise<void> {
   });
 }
 
+/** For work that needs a real task rather than a microtask, such as WebCrypto. */
+export async function settleTasks(): Promise<void> {
+  await act(async () => {
+    await new Promise((resolve) => setTimeout(resolve, 0));
+  });
+}
+
 export function jsonFile(name: string, contents: string, type = 'application/json'): File {
   return new File([contents], name, { type });
 }
