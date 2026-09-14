@@ -3,6 +3,7 @@ import { describe, expect, it } from 'vitest';
 import {
   CSS_COLOR_NAMES,
   cmykToRgb,
+  contrastRatio,
   formatCmyk,
   formatHsl,
   formatOklch,
@@ -189,6 +190,31 @@ describe('relativeLuminance', () => {
 
     expect(green).toBeGreaterThan(red);
     expect(red).toBeGreaterThan(blue);
+  });
+});
+
+const AA_NORMAL = 4.5;
+const MID_GREY = { r: 0x76, g: 0x76, b: 0x76, a: 1 };
+
+describe('contrastRatio', () => {
+  it('is 21 for black on white', () => {
+    expect(contrastRatio(BLACK, WHITE)).toBe(21);
+  });
+
+  it('is 1 for a colour on itself', () => {
+    expect(contrastRatio(WHITE, WHITE)).toBe(1);
+    expect(contrastRatio(MID_GREY, MID_GREY)).toBe(1);
+  });
+
+  it('does not care which way round the pair is given', () => {
+    expect(contrastRatio(BLACK, WHITE)).toBe(contrastRatio(WHITE, BLACK));
+  });
+
+  it('puts the usual accessible grey just over the AA line', () => {
+    // #767676 on white is the classic example of a colour that just passes.
+    const ratio = contrastRatio(MID_GREY, WHITE);
+    expect(ratio).toBeGreaterThanOrEqual(AA_NORMAL);
+    expect(ratio).toBeLessThan(5);
   });
 });
 

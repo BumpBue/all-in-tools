@@ -9,14 +9,13 @@ import { FieldError, Input, Label, Textarea } from '@/components/ui/field';
 import { format } from '@/config/i18n';
 import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
-import { parseColor, rgbToHex } from '@/lib/color';
+import { contrastRatio, parseColor, rgbToHex } from '@/lib/color';
 import { messages } from '@/tools/contrast-checker/i18n';
 import {
   AA_NORMAL,
   apcaContrast,
   apcaUse,
   checkContrast,
-  contrastRatio,
   nearestPassing,
   parseColorList,
   type ApcaUse,

@@ -13,6 +13,7 @@ import { format } from '@/config/i18n';
 import { getTool } from '@/config/tools';
 import { invalidateStoredData, useStoredData } from '@/hooks/use-stored-data';
 import { useLocale, useT } from '@/hooks/use-t';
+import { downloadText } from '@/lib/download';
 import { clearAll, exportAll, removeItem } from '@/lib/storage';
 import { formatBytes } from '@/lib/utils';
 
@@ -23,18 +24,6 @@ const DATE_LOCALES = { th: 'th-TH', en: 'en-GB' } as const;
 function backupFilename(): string {
   const today = new Date().toISOString().slice(0, 10);
   return `${SITE_NAME.toLowerCase()}-backup-${today}.json`;
-}
-
-function downloadJson(contents: string, filename: string): void {
-  const url = URL.createObjectURL(new Blob([contents], { type: EXPORT_MIME }));
-  const anchor = document.createElement('a');
-
-  anchor.href = url;
-  anchor.download = filename;
-  document.body.appendChild(anchor);
-  anchor.click();
-  anchor.remove();
-  URL.revokeObjectURL(url);
 }
 
 export function DataSettings() {
@@ -120,7 +109,7 @@ export function DataSettings() {
             variant="secondary"
             size="sm"
             disabled={tools.length === 0}
-            onClick={() => downloadJson(exportAll(), backupFilename())}
+            onClick={() => downloadText(exportAll(), backupFilename(), EXPORT_MIME)}
           >
             <Download size={ICON_SIZE} aria-hidden />
             {tools.length === 0 ? t.exportEmpty : t.export}

@@ -385,6 +385,23 @@ export function relativeLuminance(rgb: Rgb): number {
   );
 }
 
+const WCAG_OFFSET = 0.05;
+const RATIO_PLACES = 2;
+
+/**
+ * WCAG 2.x contrast, from 1 (identical) to 21 (black on white). Lives here
+ * rather than with the contrast checker because it is the luminance above it
+ * plus four lines, and two tools now ask for it.
+ */
+export function contrastRatio(foreground: Rgb, background: Rgb): number {
+  const first = relativeLuminance(foreground);
+  const second = relativeLuminance(background);
+  const [lighter, darker] = first >= second ? [first, second] : [second, first];
+
+  const ratio = (lighter + WCAG_OFFSET) / (darker + WCAG_OFFSET);
+  return Math.round(ratio * 10 ** RATIO_PLACES) / 10 ** RATIO_PLACES;
+}
+
 export function nearestColorName(rgb: Rgb): string {
   let best = '';
   let bestDistance = Number.POSITIVE_INFINITY;

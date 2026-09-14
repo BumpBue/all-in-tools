@@ -1,13 +1,12 @@
 import { describe, expect, it } from 'vitest';
 
-import { parseColor, rgbToHex } from '@/lib/color';
+import { contrastRatio, parseColor, rgbToHex } from '@/lib/color';
 import {
   AA_NORMAL,
   AAA_NORMAL,
   apcaContrast,
   apcaUse,
   checkContrast,
-  contrastRatio,
   nearestPassing,
   parseColorList,
 } from '@/tools/contrast-checker/logic';
@@ -21,28 +20,6 @@ function at(raw: string) {
 const WHITE = at('#ffffff');
 const BLACK = at('#000000');
 const MID_GREY = at('#767676');
-
-describe('contrastRatio', () => {
-  it('is 21 for black on white', () => {
-    expect(contrastRatio(BLACK, WHITE)).toBe(21);
-  });
-
-  it('is 1 for a colour on itself', () => {
-    expect(contrastRatio(WHITE, WHITE)).toBe(1);
-    expect(contrastRatio(MID_GREY, MID_GREY)).toBe(1);
-  });
-
-  it('does not care which way round the pair is given', () => {
-    expect(contrastRatio(BLACK, WHITE)).toBe(contrastRatio(WHITE, BLACK));
-  });
-
-  it('puts the usual accessible grey just over the AA line', () => {
-    // #767676 on white is the classic example of a colour that just passes.
-    const ratio = contrastRatio(MID_GREY, WHITE);
-    expect(ratio).toBeGreaterThanOrEqual(AA_NORMAL);
-    expect(ratio).toBeLessThan(5);
-  });
-});
 
 describe('checkContrast', () => {
   it('passes every level for black on white', () => {

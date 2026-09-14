@@ -1,8 +1,8 @@
 import {
   clampChromaToSrgb,
+  contrastRatio,
   oklchToRgb,
   parseColor,
-  relativeLuminance,
   rgbToHex,
   rgbToOklch,
   type Rgb,
@@ -31,8 +31,6 @@ const MIN_DELTA_Y = 0.0005;
 const LC_SCALE = 100;
 
 const MAX_CHANNEL = 255;
-const WCAG_OFFSET = 0.05;
-const RATIO_PLACES = 2;
 const LC_PLACES = 1;
 
 const SEARCH_STEPS = 200;
@@ -44,15 +42,6 @@ export interface ContrastResult {
   aaLarge: boolean;
   aaaNormal: boolean;
   aaaLarge: boolean;
-}
-
-export function contrastRatio(foreground: Rgb, background: Rgb): number {
-  const first = relativeLuminance(foreground);
-  const second = relativeLuminance(background);
-  const [lighter, darker] = first >= second ? [first, second] : [second, first];
-
-  const ratio = (lighter + WCAG_OFFSET) / (darker + WCAG_OFFSET);
-  return Math.round(ratio * 10 ** RATIO_PLACES) / 10 ** RATIO_PLACES;
 }
 
 export function checkContrast(foreground: Rgb, background: Rgb): ContrastResult {
