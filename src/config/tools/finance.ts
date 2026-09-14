@@ -193,7 +193,7 @@ export const FINANCE_TOOLS: readonly ToolDefinition[] = [
     category: 'finance',
     tier: 'B',
     icon: 'QrCode',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
 ];
