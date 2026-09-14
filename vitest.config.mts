@@ -4,8 +4,7 @@ import { defineConfig } from 'vitest/config';
 const SRC_ALIAS = '@';
 const SRC_DIR = fileURLToPath(new URL('./src', import.meta.url));
 
-// Only pure logic modules are unit tested, so no DOM environment is needed.
-const TEST_INCLUDE = ['src/**/*.test.ts'];
+const TEST_INCLUDE = ['src/**/*.test.{ts,tsx}'];
 
 export default defineConfig({
   resolve: {
@@ -13,6 +12,7 @@ export default defineConfig({
   },
   test: {
     include: TEST_INCLUDE,
+    // Pure logic tests run in node; hook tests opt into happy-dom per file.
     environment: 'node',
   },
 });
