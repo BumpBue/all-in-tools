@@ -4,6 +4,7 @@ export {
   TOOLS_BY_CATEGORY,
   TOOLS_BY_SLUG,
   TOOL_COUNT,
+  getRelatedTools,
   getTool,
 } from '@/config/tools/registry';
 export { searchTools } from '@/config/tools/search';

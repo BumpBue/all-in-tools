@@ -54,6 +54,7 @@ const TH = {
     notReady: 'เครื่องมือนี้กำลังพัฒนาอยู่ อีกไม่นานจะได้ใช้งาน',
     backToCategory: 'ดูเครื่องมืออื่นในหมวดนี้',
     linkCopied: 'คัดลอกลิงก์แล้ว',
+    uiPending: 'หน้าจอใช้งานของเครื่องมือนี้กำลังต่อเข้ามา',
   },
   footer: {
     privacy:
@@ -118,6 +119,7 @@ const EN: Dictionary = {
     notReady: 'This tool is still being built and will be available soon.',
     backToCategory: 'See other tools in this category',
     linkCopied: 'Link copied',
+    uiPending: 'The interface for this tool is being wired up.',
   },
   footer: {
     privacy:

@@ -38,3 +38,16 @@ export const TOOLS_BY_CATEGORY: Record<ToolCategory, Tool[]> =
 export function getTool(slug: string): Tool | undefined {
   return TOOLS_BY_SLUG[slug];
 }
+
+// Ordered, never random: a shuffled list would differ between the server and
+// client renders of the same page.
+export function getRelatedTools(tool: Tool, count: number): Tool[] {
+  const siblings = TOOLS_BY_CATEGORY[tool.category].filter(
+    (candidate) => candidate.slug !== tool.slug,
+  );
+
+  return [
+    ...siblings.filter((candidate) => candidate.status === 'ready'),
+    ...siblings.filter((candidate) => candidate.status !== 'ready'),
+  ].slice(0, count);
+}

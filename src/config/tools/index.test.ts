@@ -7,6 +7,7 @@ import {
   TOOLS_BY_CATEGORY,
   TOOLS_BY_SLUG,
   TOOL_COUNT,
+  getRelatedTools,
   getTool,
   isToolCategory,
   searchTools,
@@ -163,5 +164,38 @@ describe('searchTools', () => {
 
   it('returns an empty list when nothing matches', () => {
     expect(searchTools('zzzzqqqxyw')).toEqual([]);
+  });
+});
+
+describe('getRelatedTools', () => {
+  const baseConverter = getTool('base-converter')!;
+
+  it('returns tools from the same category', () => {
+    for (const related of getRelatedTools(baseConverter, 4)) {
+      expect(related.category).toBe('developer');
+    }
+  });
+
+  it('never includes the tool itself', () => {
+    const slugs = getRelatedTools(baseConverter, 4).map((tool) => tool.slug);
+    expect(slugs).not.toContain('base-converter');
+  });
+
+  it('returns the same list every call, so server and client agree', () => {
+    const first = getRelatedTools(baseConverter, 4).map((tool) => tool.slug);
+    const second = getRelatedTools(baseConverter, 4).map((tool) => tool.slug);
+    expect(first).toEqual(second);
+  });
+
+  it('honours the requested count', () => {
+    expect(getRelatedTools(baseConverter, 4)).toHaveLength(4);
+    expect(getRelatedTools(baseConverter, 2)).toHaveLength(2);
+  });
+
+  it('puts ready tools before planned ones', () => {
+    const pomodoro = getTool('pomodoro')!;
+    const statuses = getRelatedTools(pomodoro, 9).map((tool) => tool.status);
+    const sorted = [...statuses].sort((a, b) => (a === 'ready' ? -1 : 0) - (b === 'ready' ? -1 : 0));
+    expect(statuses).toEqual(sorted);
   });
 });
