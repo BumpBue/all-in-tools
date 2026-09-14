@@ -81,7 +81,11 @@ server-rendered, only the star and the share button are client.
 
 ## State
 
-**URL state** (`useUrlState`) for anything worth sharing. Initial values arrive
+**URL state** (`useUrlState`) for anything worth sharing. Never put the reader's
+content there when it could be private — a password, a pasted document, an
+uploaded file. Options, modes and toggles are fine; that is what makes a link
+worth sending. Pass `maxValueLength` when a field can hold more than a sentence,
+so an encoded file never ends up in the address bar. Initial values arrive
 as `searchParams` props from the server, never from `window.location`, so the
 first client render matches the server. Writes go through
 `history.replaceState`, not `router.replace`, which would fire an RSC request on
@@ -125,6 +129,19 @@ value rather than blanking them.
 Every string goes through `src/config/i18n.ts`, in both `th` and `en`. The
 English table is typed against the Thai one, so a missing key is a compile
 error. Use `format()` for placeholders.
+
+**Known limit:** the dictionary is one module that every page loads, because the
+header and footer read it. Five tools took it to 14.2 kB gzipped, and it grows
+with each one. Splitting it per tool would fix that but has not been done; see
+the report before adding many more.
+
+## Files as input
+
+Several tools take a file. The shape to copy is in `base64/index.tsx`: a hidden
+`<input type="file">` clicked by a styled drop zone, `onDragOver` with
+`preventDefault` to allow the drop, and a size check that reports a limit in
+words rather than failing quietly. `readFileBytes` in `hash-generator/logic.ts`
+reads in chunks when progress needs reporting.
 
 ## Tests
 
