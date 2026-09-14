@@ -2,8 +2,21 @@ export const TOOL_STORAGE_PREFIX = 'tools:';
 
 export const TOOL_STORAGE_VERSION = 1;
 
+export const TOOL_SLUG_PATTERN = /^[a-z0-9]+(?:-[a-z0-9]+)*$/;
+
 export function buildToolStorageKey(slug: string): string {
   return `${TOOL_STORAGE_PREFIX}${slug}:v${TOOL_STORAGE_VERSION}`;
+}
+
+export function parseToolStorageKey(key: string): string | null {
+  if (!key.startsWith(TOOL_STORAGE_PREFIX)) return null;
+
+  const rest = key.slice(TOOL_STORAGE_PREFIX.length);
+  const versionSeparator = rest.lastIndexOf(':');
+  if (versionSeparator === -1) return null;
+
+  const slug = rest.slice(0, versionSeparator);
+  return TOOL_SLUG_PATTERN.test(slug) ? slug : null;
 }
 
 export const COOKIE_KEYS = {
