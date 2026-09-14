@@ -1,0 +1,58 @@
+import { createToolMessages } from '@/tools/tool-messages';
+
+export const messages = createToolMessages(
+  {
+    category: 'หมวด',
+    from: 'จาก',
+    to: 'เป็น',
+    value: 'ค่า',
+    swap: 'สลับหน่วย',
+    digits: 'เลขนัยสำคัญ',
+    digitsHint: 'จำนวนตัวเลขที่มีความหมาย ไม่ใช่จำนวนทศนิยม',
+    allUnits: 'ค่าเดียวกันในทุกหน่วยของหมวดนี้',
+    unitColumn: 'หน่วย',
+    valueColumn: 'ค่า',
+    useAsTarget: 'ใช้ {unit} เป็นหน่วยปลายทาง',
+    invalid: 'กรอกเป็นตัวเลข',
+    empty: 'ใส่ตัวเลขเพื่อเริ่มแปลง',
+    notes: 'ที่มาของค่าแปลง',
+    noteLegal: 'ค่าตามกฎหมาย กำหนดไว้ใน พ.ร.บ. มาตราชั่งตวงวัด',
+    noteGoldBar: 'มาตรฐานการค้าทองคำแท่ง (1 บาท = 15.244 กรัม)',
+    noteGoldJewelry: 'มาตรฐานทองรูปพรรณ ซึ่งเบากว่าทองคำแท่งต่อหนึ่งบาท (15.16 กรัม)',
+    noteChinese: 'หน่วยระบบจีนที่ใช้กันในไทย ไม่ได้อยู่ในมาตราชั่งตวงวัด',
+    noteRice: 'ค่าที่ใช้กันทั่วไปในการตวงข้าว เป็นธรรมเนียมการค้า ไม่ใช่ค่าตามกฎหมาย',
+    noteDefined: 'ค่าที่ตั้งไว้เองเพื่อให้คำนวณได้ เพราะความยาวจริงไม่เท่ากันทุกครั้ง',
+    noteUs: 'มาตราของสหรัฐอเมริกา ซึ่งต่างจากมาตราอังกฤษ',
+    affineNote:
+      'อุณหภูมิไม่ใช่การคูณอัตราส่วน แต่เป็นเส้นตรงที่มีจุดตั้งต้นต่างกัน 0 °C จึงไม่ใช่ 0 °F',
+    dataNote: 'kB คือ 1000 ไบต์ ส่วน KiB คือ 1024 ไบต์ หน้านี้แยกสองอย่างนี้ออกจากกันเสมอ',
+  },
+  {
+    category: 'Category',
+    from: 'From',
+    to: 'To',
+    value: 'Value',
+    swap: 'Swap the units',
+    digits: 'Significant digits',
+    digitsHint: 'Meaningful figures, not decimal places.',
+    allUnits: 'The same amount in every unit of this category',
+    unitColumn: 'Unit',
+    valueColumn: 'Value',
+    useAsTarget: 'Convert to {unit}',
+    invalid: 'Enter a number',
+    empty: 'Enter a number to start converting',
+    notes: 'Where these factors come from',
+    noteLegal: 'Fixed in law by the Weights and Measures Act',
+    noteGoldBar: 'The bullion gold trading standard (1 baht = 15.244 g)',
+    noteGoldJewelry:
+      'The gold jewellery standard, lighter per baht than bullion (15.16 g)',
+    noteChinese: 'A Chinese unit in everyday Thai use, not part of the legal system',
+    noteRice: 'A rice-trade convention rather than a figure fixed in law',
+    noteDefined: 'A figure chosen so the sum works, since the real length varies',
+    noteUs: 'The United States measure, which differs from the imperial one',
+    affineNote:
+      'Temperature is not a ratio but a line with a different starting point, which is why 0 °C is not 0 °F.',
+    dataNote:
+      'A kB is 1000 bytes and a KiB is 1024. This page never mixes the two.',
+  },
+);

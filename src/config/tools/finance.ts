@@ -136,7 +136,7 @@ export const FINANCE_TOOLS: readonly ToolDefinition[] = [
     category: 'finance',
     tier: 'A',
     icon: 'Ruler',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
