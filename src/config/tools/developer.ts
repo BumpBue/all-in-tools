@@ -189,7 +189,7 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
     category: 'developer',
     tier: 'A',
     icon: 'Link',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
