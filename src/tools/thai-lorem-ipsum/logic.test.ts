@@ -1,12 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
+import { countWords } from '@/lib/text';
+
 import {
   DEFAULT_OPTIONS,
   MAX_COUNTS,
   UNITS,
   buildSentence,
   clampCount,
-  countWords,
   createPicker,
   createRandom,
   generate,

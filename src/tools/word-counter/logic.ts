@@ -1,3 +1,5 @@
+import { segmentWords } from '@/lib/text';
+
 export const THAI_READING_WPM = 180;
 export const LATIN_READING_WPM = 230;
 export const THAI_SPEAKING_WPM = 130;
@@ -10,7 +12,6 @@ export const TOP_WORD_COUNT = 20;
 const THAI_LETTER = /[฀-๿]/;
 const LATIN_LETTER = /[A-Za-z]/;
 const DIGIT = /[0-9๐-๙]/;
-const LATIN_WORD = /[A-Za-z0-9'’-]+/g;
 const SENTENCE_END = /[.!?。！？ฯ]+|\n{2,}/;
 const PARAGRAPH_BREAK = /\n\s*\n/;
 const WHITESPACE = /\s/g;
@@ -28,8 +29,6 @@ export const LATIN_STOP_WORDS = new Set([
   'been', 'it', 'its', 'this', 'that', 'these', 'those', 'as', 'from', 'we',
   'you', 'they', 'he', 'she', 'i', 'not', 'no', 'do', 'does', 'did',
 ]);
-
-export type SegmenterSupport = 'intl' | 'fallback';
 
 export interface WordCounts {
   characters: number;
@@ -51,35 +50,6 @@ export interface WordFrequency {
 export interface ReadingTime {
   readingSeconds: number;
   speakingSeconds: number;
-}
-
-function hasIntlSegmenter(): boolean {
-  return typeof Intl !== 'undefined' && 'Segmenter' in Intl;
-}
-
-export function segmenterSupport(): SegmenterSupport {
-  return hasIntlSegmenter() ? 'intl' : 'fallback';
-}
-
-/**
- * Thai does not put spaces between words, so splitting on whitespace
- * undercounts it badly. Intl.Segmenter knows where the boundaries are; without
- * it the fallback treats each run of Thai letters as one word, which is wrong
- * but at least admits to being an estimate.
- */
-export function segmentWords(text: string): string[] {
-  if (text.trim().length === 0) return [];
-
-  if (hasIntlSegmenter()) {
-    const segmenter = new Intl.Segmenter('th', { granularity: 'word' });
-    return [...segmenter.segment(text)]
-      .filter((piece) => piece.isWordLike === true)
-      .map((piece) => piece.segment);
-  }
-
-  const thaiRuns = text.match(/[฀-๿]+/g) ?? [];
-  const latinRuns = text.match(LATIN_WORD) ?? [];
-  return [...thaiRuns, ...latinRuns];
 }
 
 function classify(word: string): 'thai' | 'latin' | 'number' | 'other' {

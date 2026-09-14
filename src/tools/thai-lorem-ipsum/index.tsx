@@ -10,6 +10,7 @@ import { Toggle } from '@/components/ui/toggle';
 import { format } from '@/config/i18n';
 import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
+import { countWords } from '@/lib/text';
 import { messages } from '@/tools/thai-lorem-ipsum/i18n';
 import {
   DEFAULT_COUNTS,
@@ -17,7 +18,6 @@ import {
   MAX_COUNTS,
   UNITS,
   clampCount,
-  countWords,
   generate,
   type LoremFormat,
   type LoremUnit,

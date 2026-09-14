@@ -1,3 +1,5 @@
+import { hasSegmenter, segmentGraphemes } from '@/lib/text';
+
 export type Granularity = 'line' | 'word' | 'character';
 export const GRANULARITIES: readonly Granularity[] = ['line', 'word', 'character'];
 
@@ -43,10 +45,6 @@ export type DiffErrorCode = 'too-long' | 'too-many-tokens' | 'too-different';
 
 export type DiffOutcome = { ok: true; ops: DiffOp[] } | { ok: false; code: DiffErrorCode };
 
-function hasSegmenter(): boolean {
-  return typeof Intl !== 'undefined' && 'Segmenter' in Intl;
-}
-
 export function normalizeNewlines(text: string): string {
   return text.replace(NEWLINES, '\n');
 }
@@ -58,8 +56,9 @@ export function splitLines(text: string): string[] {
 /**
  * Thai writes no spaces between words, so splitting on whitespace would treat a
  * whole sentence as one token and report it as entirely rewritten.
- * Intl.Segmenter knows where the words end. Separators are kept as tokens of
- * their own so the text can be put back together exactly as it came in.
+ *
+ * Not segmentWords from lib: this one keeps the separators as tokens of their
+ * own, because a diff has to put the text back together exactly as it came in.
  */
 export function splitWords(text: string): string[] {
   if (text.length === 0) return [];
@@ -72,16 +71,8 @@ export function splitWords(text: string): string[] {
   return text.split(/(\s+)/).filter((piece) => piece.length > 0);
 }
 
-/** Graphemes, not code points: a Thai tone mark belongs to the letter it sits on. */
 export function splitCharacters(text: string): string[] {
-  if (text.length === 0) return [];
-
-  if (hasSegmenter()) {
-    const segmenter = new Intl.Segmenter('th', { granularity: 'grapheme' });
-    return [...segmenter.segment(text)].map((piece) => piece.segment);
-  }
-
-  return [...text];
+  return segmentGraphemes(text);
 }
 
 export function tokenize(text: string, granularity: Granularity): string[] {

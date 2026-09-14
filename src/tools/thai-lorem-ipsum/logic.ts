@@ -1,3 +1,4 @@
+import { countWords, hasSegmenter } from '@/lib/text';
 import { BANKS, type LoremMode } from '@/tools/thai-lorem-ipsum/words';
 
 export const UNITS = ['words', 'sentences', 'paragraphs'] as const;
@@ -158,23 +159,6 @@ export function buildParagraph(
 
   const ending = options.punctuation ? FULL_STOP : '';
   return sentences.map((sentence) => `${sentence}${ending}`).join(SENTENCE_SEPARATOR);
-}
-
-function hasSegmenter(): boolean {
-  return typeof Intl !== 'undefined' && 'Segmenter' in Intl;
-}
-
-/** Counted the same way the word counter counts, so the two agree. */
-export function countWords(text: string): number {
-  if (text.trim().length === 0) return 0;
-
-  if (hasSegmenter()) {
-    return [...new Intl.Segmenter('th', { granularity: 'word' }).segment(text)].filter(
-      (piece) => piece.isWordLike === true,
-    ).length;
-  }
-
-  return text.split(/\s+/).filter((piece) => piece.length > 0).length;
 }
 
 /** Cuts the text after the nth word, leaving whole words behind. */

@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { segmentWords, segmenterSupport } from '@/lib/text';
+
 import {
   LATIN_READING_WPM,
   MAX_WPM,
@@ -8,8 +10,6 @@ import {
   clampWpm,
   countText,
   estimateTime,
-  segmentWords,
-  segmenterSupport,
   targetDifference,
   wordFrequency,
 } from '@/tools/word-counter/logic';

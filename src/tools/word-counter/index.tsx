@@ -8,6 +8,7 @@ import { Input, Label, Textarea } from '@/components/ui/field';
 import { format } from '@/config/i18n';
 import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
+import { segmenterSupport } from '@/lib/text';
 import { messages } from '@/tools/word-counter/i18n';
 import {
   LATIN_READING_WPM,
@@ -19,7 +20,6 @@ import {
   clampWpm,
   countText,
   estimateTime,
-  segmenterSupport,
   targetDifference,
   wordFrequency,
 } from '@/tools/word-counter/logic';
