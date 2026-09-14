@@ -191,7 +191,7 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
     category: 'design',
     tier: 'A',
     icon: 'Languages',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
 ];
