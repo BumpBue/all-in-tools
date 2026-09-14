@@ -82,3 +82,9 @@ export function pressKey(
     target.dispatchEvent(new KeyboardEvent('keydown', { key, bubbles: true, ...init }));
   });
 }
+
+export function click(target: Element | null | undefined): void {
+  act(() => {
+    (target as HTMLElement | null)?.click();
+  });
+}

@@ -297,3 +297,81 @@ export function importAll(json: string, mode: ImportMode = 'merge'): ImportResul
 
   return { ok: writeErrors.length === 0, imported, errors: writeErrors };
 }
+
+export interface StoredToolSummary {
+  slug: string;
+  itemCount: number;
+  updatedAt: number;
+  bytes: number;
+}
+
+export interface StorageSummary {
+  tools: StoredToolSummary[];
+  totalBytes: number;
+}
+
+export interface ImportPreview {
+  ok: boolean;
+  errors: string[];
+  tools: Array<{ slug: string; itemCount: number; updatedAt: number }>;
+}
+
+function countItems(data: unknown): number {
+  if (Array.isArray(data)) return data.length;
+  if (typeof data === 'object' && data !== null) return Object.keys(data).length;
+  return data === null || data === undefined ? 0 : 1;
+}
+
+// localStorage is billed in UTF-16 code units, so a character costs two bytes.
+const BYTES_PER_CHARACTER = 2;
+
+export function summarizeStorage(): StorageSummary {
+  const storage = getStorage();
+  if (!storage) return { tools: [], totalBytes: 0 };
+
+  const tools: StoredToolSummary[] = [];
+  let totalBytes = 0;
+
+  for (const key of listToolKeys()) {
+    const slug = parseToolStorageKey(key);
+    if (!slug) continue;
+
+    try {
+      const raw = storage.getItem(key);
+      if (raw === null) continue;
+
+      const bytes = (key.length + raw.length) * BYTES_PER_CHARACTER;
+      totalBytes += bytes;
+
+      const parsed: unknown = JSON.parse(raw);
+      if (!isEnvelope(parsed)) continue;
+
+      tools.push({
+        slug,
+        itemCount: countItems(parsed.data),
+        updatedAt: parsed.updatedAt,
+        bytes,
+      });
+    } catch {
+      continue;
+    }
+  }
+
+  tools.sort((a, b) => b.updatedAt - a.updatedAt);
+  return { tools, totalBytes };
+}
+
+/** Validates an import file and reports what it would change, writing nothing. */
+export function inspectImport(json: string): ImportPreview {
+  const { entries, errors } = validateExportPayload(json);
+
+  return {
+    ok: errors.length === 0,
+    errors,
+    tools: entries.map(([slug, envelope]) => ({
+      slug,
+      itemCount: countItems(envelope.data),
+      updatedAt: envelope.updatedAt,
+    })),
+  };
+}

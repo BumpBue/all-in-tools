@@ -7,8 +7,10 @@ import {
   getItem,
   importAll,
   listToolKeys,
+  inspectImport,
   removeItem,
   setItem,
+  summarizeStorage,
   type ExportPayload,
 } from '@/lib/storage';
 
@@ -346,5 +348,112 @@ describe('importAll modes', () => {
   it('reports the failure when storage is unavailable', () => {
     vi.unstubAllGlobals();
     expect(importAll(payload)).toMatchObject({ ok: false, imported: 0 });
+  });
+});
+
+describe('summarizeStorage', () => {
+  it('is empty when nothing is stored', () => {
+    expect(summarizeStorage()).toEqual({ tools: [], totalBytes: 0 });
+  });
+
+  it('counts array entries as items', () => {
+    setItem(SAMPLE_KEY, [{ id: 1 }, { id: 2 }, { id: 3 }]);
+    expect(summarizeStorage().tools[0]).toMatchObject({
+      slug: SAMPLE_SLUG,
+      itemCount: 3,
+    });
+  });
+
+  it('counts object keys as items', () => {
+    setItem(SAMPLE_KEY, { a: 1, b: 2 });
+    expect(summarizeStorage().tools[0]?.itemCount).toBe(2);
+  });
+
+  it('counts a scalar as a single item', () => {
+    setItem(SAMPLE_KEY, 42);
+    expect(summarizeStorage().tools[0]?.itemCount).toBe(1);
+  });
+
+  it('reports a non-zero size and a total across tools', () => {
+    setItem(SAMPLE_KEY, [1, 2, 3]);
+    setItem(buildToolStorageKey('habit-tracker'), { streak: 7 });
+
+    const summary = summarizeStorage();
+    expect(summary.tools).toHaveLength(2);
+    expect(summary.totalBytes).toBe(
+      summary.tools.reduce((sum, tool) => sum + tool.bytes, 0),
+    );
+    expect(summary.totalBytes).toBeGreaterThan(0);
+  });
+
+  it('puts the most recently updated tool first', () => {
+    setItem(buildToolStorageKey('habit-tracker'), 1);
+    storage.setItem(
+      SAMPLE_KEY,
+      JSON.stringify({ version: 1, data: 1, updatedAt: Date.now() + 10_000 }),
+    );
+
+    expect(summarizeStorage().tools[0]?.slug).toBe(SAMPLE_SLUG);
+  });
+
+  it('skips unreadable entries and keys outside the prefix', () => {
+    setItem(SAMPLE_KEY, [1]);
+    storage.setItem(UNRELATED_KEY, 'x');
+    storage.setItem(buildToolStorageKey('flashcards'), '{broken');
+
+    expect(summarizeStorage().tools.map((tool) => tool.slug)).toEqual([SAMPLE_SLUG]);
+  });
+
+  it('is empty when storage is unavailable', () => {
+    vi.unstubAllGlobals();
+    expect(summarizeStorage()).toEqual({ tools: [], totalBytes: 0 });
+  });
+});
+
+describe('inspectImport', () => {
+  const payload = JSON.stringify({
+    app: 'tools',
+    schemaVersion: 1,
+    tools: {
+      pomodoro: { version: 1, data: [1, 2], updatedAt: 5 },
+      flashcards: { version: 1, data: { a: 1 }, updatedAt: 6 },
+    },
+  });
+
+  it('summarizes what the file would write', () => {
+    const preview = inspectImport(payload);
+
+    expect(preview.ok).toBe(true);
+    expect(preview.errors).toEqual([]);
+    expect(preview.tools).toEqual([
+      { slug: 'pomodoro', itemCount: 2, updatedAt: 5 },
+      { slug: 'flashcards', itemCount: 1, updatedAt: 6 },
+    ]);
+  });
+
+  it('writes nothing while inspecting', () => {
+    setItem(SAMPLE_KEY, { keep: true });
+    inspectImport(payload);
+    expect(getItem(SAMPLE_KEY, FALLBACK)).toEqual({ keep: true });
+  });
+
+  it('reports why a bad file was rejected', () => {
+    const preview = inspectImport('{ not json');
+    expect(preview.ok).toBe(false);
+    expect(preview.errors).toHaveLength(1);
+    expect(preview.tools).toEqual([]);
+  });
+
+  it('names the tool whose entry is malformed', () => {
+    const preview = inspectImport(
+      JSON.stringify({
+        app: 'tools',
+        schemaVersion: 1,
+        tools: { pomodoro: { data: 'no envelope' } },
+      }),
+    );
+
+    expect(preview.ok).toBe(false);
+    expect(preview.errors[0]).toContain('pomodoro');
   });
 });
