@@ -1,7 +1,5 @@
 import { thaiHolidaySet } from '@/tools/date-calculator/holidays';
 
-export const BUDDHIST_YEAR_OFFSET = 543;
-
 export type DateUnit = 'days' | 'weeks' | 'months' | 'years';
 export const DATE_UNITS: readonly DateUnit[] = ['days', 'weeks', 'months', 'years'];
 
@@ -187,10 +185,6 @@ export function countBusinessDays(
     holidays: holidayCount,
     business: total - weekends - holidayCount,
   };
-}
-
-export function toBuddhistYear(gregorian: number): number {
-  return gregorian + BUDDHIST_YEAR_OFFSET;
 }
 
 export function yearOf(utc: number): number {

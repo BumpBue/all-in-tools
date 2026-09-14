@@ -10,6 +10,7 @@ import { Toggle, type ToggleOption } from '@/components/ui/toggle';
 import { format } from '@/config/i18n';
 import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
+import { toBuddhistYear } from '@/lib/datetime';
 import { messages } from '@/tools/date-calculator/i18n';
 import { thaiHolidaysFor } from '@/tools/date-calculator/holidays';
 import {
@@ -19,7 +20,6 @@ import {
   dateSpan,
   formatDate,
   parseDate,
-  toBuddhistYear,
   yearOf,
   type DateUnit,
   type MonthEndMode,

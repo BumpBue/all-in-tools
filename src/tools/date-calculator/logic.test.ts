@@ -14,7 +14,6 @@ import {
   holidaysBetween,
   isWeekend,
   parseDate,
-  toBuddhistYear,
 } from '@/tools/date-calculator/logic';
 
 function at(iso: string): number {
@@ -239,8 +238,3 @@ describe('Thai holidays', () => {
   });
 });
 
-describe('Buddhist year', () => {
-  it('is 543 ahead', () => {
-    expect(toBuddhistYear(2026)).toBe(2569);
-  });
-});

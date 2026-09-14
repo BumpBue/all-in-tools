@@ -1,12 +1,8 @@
+import { ICT_TIME_ZONE, UTC_TIME_ZONE } from '@/lib/datetime';
+
 export type TimestampUnit = 'seconds' | 'milliseconds';
 
 export const UNITS: readonly TimestampUnit[] = ['seconds', 'milliseconds'];
-
-export const ICT_TIME_ZONE = 'Asia/Bangkok';
-export const UTC_TIME_ZONE = 'UTC';
-
-/** พ.ศ. is the Gregorian year plus this. */
-export const BUDDHIST_YEAR_OFFSET = 543;
 
 const MILLISECONDS_PER_SECOND = 1000;
 
@@ -168,60 +164,10 @@ export function formatRfc2822(milliseconds: number): string {
   ].join(' ');
 }
 
-export function formatInZone(
-  milliseconds: number,
-  timeZone: string,
-  locale: string,
-): string {
-  return new Intl.DateTimeFormat(locale, {
-    timeZone,
-    dateStyle: 'full',
-    timeStyle: 'medium',
-  }).format(milliseconds);
-}
-
 /** The value a datetime-local input wants, expressed in the given zone. */
 export function toLocalInputValue(milliseconds: number, timeZone: string): string {
   const offset = zoneOffsetMilliseconds(milliseconds, timeZone);
   return new Date(milliseconds + offset).toISOString().slice(0, ISO_SECONDS_LENGTH);
-}
-
-export function gregorianYear(milliseconds: number, timeZone: string): number {
-  return Number(
-    new Intl.DateTimeFormat('en-US', { timeZone, year: 'numeric' }).format(
-      milliseconds,
-    ),
-  );
-}
-
-export function toBuddhistYear(gregorian: number): number {
-  return gregorian + BUDDHIST_YEAR_OFFSET;
-}
-
-const RELATIVE_STEPS: ReadonlyArray<readonly [Intl.RelativeTimeFormatUnit, number]> = [
-  ['year', 365 * 24 * 60 * 60 * 1000],
-  ['month', 30 * 24 * 60 * 60 * 1000],
-  ['day', 24 * 60 * 60 * 1000],
-  ['hour', 60 * 60 * 1000],
-  ['minute', 60 * 1000],
-  ['second', 1000],
-];
-
-export function formatRelative(
-  milliseconds: number,
-  now: number,
-  locale: string,
-): string {
-  const difference = milliseconds - now;
-  const formatter = new Intl.RelativeTimeFormat(locale, { numeric: 'auto' });
-
-  for (const [unit, size] of RELATIVE_STEPS) {
-    if (Math.abs(difference) >= size) {
-      return formatter.format(Math.round(difference / size), unit);
-    }
-  }
-
-  return formatter.format(0, 'second');
 }
 
 export function listTimeZones(): string[] {

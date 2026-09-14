@@ -1,19 +1,14 @@
 import { describe, expect, it } from 'vitest';
 
+import { ICT_TIME_ZONE, UTC_TIME_ZONE } from '@/lib/datetime';
 import {
-  BUDDHIST_YEAR_OFFSET,
-  ICT_TIME_ZONE,
-  UTC_TIME_ZONE,
   detectUnit,
   formatIso,
-  formatRelative,
   formatRfc2822,
   fromMilliseconds,
-  gregorianYear,
   listTimeZones,
   parseLocalDateTime,
   parseTimestamp,
-  toBuddhistYear,
   toLocalInputValue,
   toMilliseconds,
   zoneOffsetMilliseconds,
@@ -184,46 +179,6 @@ describe('formats', () => {
     expect(formatRfc2822(Date.UTC(2026, 0, 5, 3, 4, 5))).toBe(
       'Mon, 05 Jan 2026 03:04:05 +0000',
     );
-  });
-});
-
-describe('Buddhist year', () => {
-  it('is 543 ahead of the Gregorian one', () => {
-    expect(toBuddhistYear(2026)).toBe(2569);
-    expect(toBuddhistYear(2026) - 2026).toBe(BUDDHIST_YEAR_OFFSET);
-  });
-
-  it('reads the year in the zone being shown', () => {
-    // 17:00 UTC on new year's eve is already the new year in Bangkok.
-    const eve = Date.UTC(2026, 11, 31, 18, 0, 0);
-    expect(gregorianYear(eve, UTC_TIME_ZONE)).toBe(2026);
-    expect(gregorianYear(eve, ICT_TIME_ZONE)).toBe(2027);
-  });
-});
-
-describe('formatRelative', () => {
-  const now = MOMENT_MS;
-
-  it('describes the past and the future', () => {
-    expect(formatRelative(now - 3 * 60 * 60 * 1000, now, 'en')).toContain('3 hours ago');
-    expect(formatRelative(now + 2 * 24 * 60 * 60 * 1000, now, 'en')).toContain(
-      'in 2 days',
-    );
-  });
-
-  it('picks the largest unit that fits', () => {
-    expect(formatRelative(now - 90 * 1000, now, 'en')).toContain('minute');
-    expect(formatRelative(now - 400 * 24 * 60 * 60 * 1000, now, 'en')).toContain(
-      'year',
-    );
-  });
-
-  it('says now when the difference is under a second', () => {
-    expect(formatRelative(now + 200, now, 'en')).toBe('now');
-  });
-
-  it('speaks Thai too', () => {
-    expect(formatRelative(now - 60 * 60 * 1000, now, 'th')).toContain('ชั่วโมง');
   });
 });
 
