@@ -24,7 +24,7 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
     category: 'design',
     tier: 'B',
     icon: 'Paintbrush',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
