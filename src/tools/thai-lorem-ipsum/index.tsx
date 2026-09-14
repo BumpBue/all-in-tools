@@ -10,6 +10,7 @@ import { Toggle } from '@/components/ui/toggle';
 import { format } from '@/config/i18n';
 import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
+import { drawSeed } from '@/lib/random';
 import { countWords } from '@/lib/text';
 import { messages } from '@/tools/thai-lorem-ipsum/i18n';
 import {
@@ -59,12 +60,6 @@ function readEnabled(raw: string | undefined): Set<OptionId> {
       OPTION_IDS.includes(id as OptionId),
     ),
   );
-}
-
-function drawSeed(): number {
-  const buffer = new Uint32Array(1);
-  crypto.getRandomValues(buffer);
-  return buffer[0] ?? 0;
 }
 
 export default function ThaiLoremIpsum({ searchParams }: ToolComponentProps) {

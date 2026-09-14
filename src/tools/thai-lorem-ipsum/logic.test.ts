@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest';
 
+import { createRandom } from '@/lib/random';
 import { countWords } from '@/lib/text';
 
 import {
@@ -9,7 +10,6 @@ import {
   buildSentence,
   clampCount,
   createPicker,
-  createRandom,
   generate,
   generateParagraphs,
   trimToWords,
