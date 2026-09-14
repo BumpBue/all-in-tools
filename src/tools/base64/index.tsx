@@ -8,7 +8,7 @@ import { CopyButton } from '@/components/ui/copy-button';
 import { FieldError, Label, Textarea } from '@/components/ui/field';
 import { Toggle, type ToggleOption } from '@/components/ui/toggle';
 import { format } from '@/config/i18n';
-import { useT } from '@/hooks/use-t';
+import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
 import { formatBytes } from '@/lib/utils';
 import {
@@ -18,6 +18,7 @@ import {
   encodeText,
   type Base64Variant,
 } from '@/tools/base64/logic';
+import { messages } from '@/tools/base64/i18n';
 import type { ToolComponentProps } from '@/tools/types';
 
 const URL_TEXT_KEY = 't';
@@ -57,7 +58,7 @@ function downloadBytes(bytes: Uint8Array) {
 }
 
 export default function Base64Tool({ searchParams }: ToolComponentProps) {
-  const t = useT().base64;
+  const t = messages(useLocale());
 
   const [urlState, setUrlState] = useUrlState(
     {

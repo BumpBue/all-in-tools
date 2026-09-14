@@ -9,7 +9,7 @@ import { Badge } from '@/components/ui/card';
 import { FieldError, Input, Label, Textarea } from '@/components/ui/field';
 import { Toggle, type ToggleOption } from '@/components/ui/toggle';
 import { format } from '@/config/i18n';
-import { useT } from '@/hooks/use-t';
+import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
 import {
   buildUrl,
@@ -22,6 +22,7 @@ import {
   type QueryParam,
   type UrlParts,
 } from '@/tools/url-encoder/logic';
+import { messages } from '@/tools/url-encoder/i18n';
 import type { ToolComponentProps } from '@/tools/types';
 
 const URL_TEXT_KEY = 't';
@@ -46,7 +47,7 @@ function readMode(raw: string | undefined): EncodeMode {
 }
 
 export default function UrlEncoder({ searchParams }: ToolComponentProps) {
-  const t = useT().urlEncoder;
+  const t = messages(useLocale());
 
   const [urlState, setUrlState] = useUrlState(
     {

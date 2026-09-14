@@ -7,8 +7,9 @@ import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/card';
 import { FieldError, Input, Label, Select } from '@/components/ui/field';
 import { format } from '@/config/i18n';
-import { useT } from '@/hooks/use-t';
+import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
+import { messages } from '@/tools/base-converter/i18n';
 import type { ToolComponentProps } from '@/tools/types';
 import {
   MAX_BASE,
@@ -50,8 +51,7 @@ function readBase(raw: string | undefined, fallback: number): number {
 }
 
 export default function BaseConverter({ searchParams }: ToolComponentProps) {
-  const messages = useT();
-  const t = messages.baseConverter;
+  const t = messages(useLocale());
 
   const initialBase = readBase(searchParams[URL_BASE_KEY], DEFAULT_BASE);
   const initialText = searchParams[URL_VALUE_KEY] ?? '';

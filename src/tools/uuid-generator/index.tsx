@@ -6,7 +6,7 @@ import { useId, useMemo, useState } from 'react';
 import { Button } from '@/components/ui/button';
 import { CopyButton } from '@/components/ui/copy-button';
 import { FieldError, Input, Label, Select } from '@/components/ui/field';
-import { useLocale, useT } from '@/hooks/use-t';
+import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
 import {
   ID_KINDS,
@@ -23,6 +23,7 @@ import {
   isValidAlphabet,
   type IdKind,
 } from '@/tools/uuid-generator/logic';
+import { messages } from '@/tools/uuid-generator/i18n';
 import type { ToolComponentProps } from '@/tools/types';
 
 const URL_KIND_KEY = 'k';
@@ -50,7 +51,7 @@ function readFlag(raw: string | undefined, fallback: boolean): boolean {
 }
 
 export default function UuidGenerator({ searchParams }: ToolComponentProps) {
-  const t = useT().uuidGenerator;
+  const t = messages(useLocale());
   const locale = useLocale();
 
   // Options travel in the link; the generated values do not. A link that

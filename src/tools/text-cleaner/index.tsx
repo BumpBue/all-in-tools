@@ -7,7 +7,7 @@ import { CopyButton } from '@/components/ui/copy-button';
 import { Badge } from '@/components/ui/card';
 import { Label, Textarea } from '@/components/ui/field';
 import { format } from '@/config/i18n';
-import { useT } from '@/hooks/use-t';
+import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
 import {
   DEFAULT_RULES,
@@ -17,6 +17,7 @@ import {
   resolveExclusive,
   type RuleId,
 } from '@/tools/text-cleaner/logic';
+import { messages } from '@/tools/text-cleaner/i18n';
 import type { ToolComponentProps } from '@/tools/types';
 
 const URL_RULES_KEY = 'r';
@@ -53,7 +54,7 @@ function readRules(raw: string | undefined): RuleId[] {
 }
 
 export default function TextCleaner({ searchParams }: ToolComponentProps) {
-  const t = useT().textCleaner;
+  const t = messages(useLocale());
 
   // Only which rules are on travels in the link. The text being cleaned is the
   // reader's and has no business in a URL.

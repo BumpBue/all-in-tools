@@ -9,7 +9,7 @@ import { Badge, Skeleton } from '@/components/ui/card';
 import { FieldError, Input, Label, Textarea } from '@/components/ui/field';
 import { Toggle, type ToggleOption } from '@/components/ui/toggle';
 import { format } from '@/config/i18n';
-import { useT } from '@/hooks/use-t';
+import { useLocale } from '@/hooks/use-t';
 import { useUrlState } from '@/hooks/use-url-state';
 import { formatBytes } from '@/lib/utils';
 import {
@@ -23,6 +23,7 @@ import {
   whichAlgorithmByLength,
   type HashAlgorithm,
 } from '@/tools/hash-generator/logic';
+import { messages } from '@/tools/hash-generator/i18n';
 import type { ToolComponentProps } from '@/tools/types';
 
 const URL_SOURCE_KEY = 'src';
@@ -39,7 +40,7 @@ function readSource(raw: string | undefined): Source {
 }
 
 export default function HashGenerator({ searchParams }: ToolComponentProps) {
-  const t = useT().hashGenerator;
+  const t = messages(useLocale());
 
   // Only the chosen source travels in the link. What is being hashed is often a
   // password or a private file and has no business in a URL.

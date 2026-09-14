@@ -126,14 +126,31 @@ value rather than blanking them.
 
 ## Text
 
-Every string goes through `src/config/i18n.ts`, in both `th` and `en`. The
-English table is typed against the Thai one, so a missing key is a compile
-error. Use `format()` for placeholders.
+A tool's own strings live in `src/tools/<slug>/i18n.ts`:
 
-**Known limit:** the dictionary is one module that every page loads, because the
-header and footer read it. Five tools took it to 14.2 kB gzipped, and it grows
-with each one. Splitting it per tool would fix that but has not been done; see
-the report before adding many more.
+```ts
+import { createToolMessages } from '@/tools/tool-messages';
+
+export const messages = createToolMessages(
+  { title: 'ชื่อ' },
+  { title: 'Title' },
+);
+```
+
+and the component reads them with `const t = messages(useLocale())`. They then
+travel in that route's chunk and nowhere else.
+
+`src/config/i18n.ts` is only for strings every page needs: header, footer, home,
+categories, search, settings, the palette and ToolShell. It loads on every page,
+so a tool string placed there ships to readers who never open the tool — that
+cost the whole site 5 kB gzipped before this was split.
+`src/config/i18n.test.ts` fails if a tool section reappears there.
+
+In both files the English table is typed against the Thai one, so a missing or
+renamed key is a compile error. Use `format()` for placeholders.
+
+A tool's name and short description stay in the registry, not here: the palette
+and the home page need them without loading the tool.
 
 ## Files as input
 
@@ -155,6 +172,13 @@ reads in chunks when progress needs reporting.
 - a round trip through every mode the tool supports, with a fixed seed so a
   failure is reproducible
 - case handling, if input is case-insensitive
+
+Write literals that cannot be corrupted on the way into the file. A number past
+`Number.MAX_SAFE_INTEGER` written as a plain literal is already rounded, a
+decomposed character is composed by any editor saving as NFC, and text passed
+through a shell may be normalized before it lands. Use `BigInt` literals and
+`\uXXXX` escapes so a test exercises what it claims to. Each of those has
+already produced a test here that passed while checking nothing.
 
 Interactive behaviour worth a test goes in a `*.test.tsx` beside the component
 using `@/test/react`; see `command-palette.test.tsx`.
