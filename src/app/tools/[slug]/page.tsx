@@ -6,6 +6,7 @@ import { Hammer } from 'lucide-react';
 import { JsonLd } from '@/components/json-ld';
 import { RecordRecent } from '@/components/tool/record-recent';
 import { ToolShell } from '@/components/tool/tool-shell';
+import { buttonClasses } from '@/components/ui/button';
 import { EmptyState } from '@/components/ui/card';
 import { getMessages } from '@/config/i18n';
 import { RELATED_TOOLS_COUNT, SITE_NAME, SITE_URL } from '@/config/site';
@@ -90,7 +91,7 @@ export default async function ToolPage({
             action={
               <Link
                 href={`/category/${tool.category}`}
-                className="inline-flex h-8 items-center rounded-control border border-border bg-surface px-3 text-sm font-medium transition-colors hover:border-border-strong hover:bg-surface-subtle"
+                className={buttonClasses({ variant: 'secondary', size: 'sm' })}
               >
                 {t.tool.backToCategory}
               </Link>

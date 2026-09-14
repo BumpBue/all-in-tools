@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation';
 import { Search, X } from 'lucide-react';
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 
+import { buttonClasses } from '@/components/ui/button';
 import { Badge } from '@/components/ui/card';
 import { Icon } from '@/components/ui/icon';
 import { format } from '@/config/i18n';
@@ -203,7 +204,7 @@ export function CommandPalette({ onClose }: { onClose: () => void }) {
             type="button"
             onClick={onClose}
             aria-label={t.search.close}
-            className="inline-flex size-8 shrink-0 items-center justify-center rounded-control text-muted transition-colors hover:bg-surface-subtle hover:text-foreground"
+            className={buttonClasses({ variant: 'ghost', size: 'icon', className: 'shrink-0' })}
           >
             <X size={ICON_SIZE} aria-hidden />
           </button>

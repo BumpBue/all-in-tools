@@ -3,7 +3,7 @@ import type { ButtonHTMLAttributes } from 'react';
 import { cn } from '@/lib/utils';
 
 export type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
-export type ButtonSize = 'sm' | 'md';
+export type ButtonSize = 'sm' | 'md' | 'icon';
 
 const BASE =
   'inline-flex items-center justify-center gap-2 rounded-control font-medium ' +
@@ -20,16 +20,31 @@ const VARIANTS: Record<ButtonVariant, string> = {
 const SIZES: Record<ButtonSize, string> = {
   sm: 'h-8 px-3 text-sm',
   md: 'h-10 px-4 text-sm',
+  icon: 'size-8',
 };
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface ButtonStyle {
   variant?: ButtonVariant;
   size?: ButtonSize;
+  className?: string;
 }
 
-export function Button({
+// Shared with <Link>, which cannot be a <button> but should look like one.
+export function buttonClasses({
   variant = 'primary',
   size = 'md',
+  className,
+}: ButtonStyle = {}): string {
+  return cn(BASE, VARIANTS[variant], SIZES[size], className);
+}
+
+export interface ButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    ButtonStyle {}
+
+export function Button({
+  variant,
+  size,
   className,
   type = 'button',
   ...props
@@ -37,7 +52,7 @@ export function Button({
   return (
     <button
       type={type}
-      className={cn(BASE, VARIANTS[variant], SIZES[size], className)}
+      className={buttonClasses({ variant, size, className })}
       {...props}
     />
   );
