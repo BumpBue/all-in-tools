@@ -6,8 +6,8 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
     slug: 'json-formatter',
     name: { th: 'JSON Formatter & Validator', en: 'JSON Formatter & Validator' },
     description: {
-      th: 'จัดรูปแบบ JSON ให้อ่านง่าย ย่อขนาด และชี้ตำแหน่งที่ผิดไวยากรณ์อย่างแม่นยำ',
-      en: 'Pretty-print, minify and validate JSON with precise error positions.',
+      th: 'จัดรูปแบบ ย่อขนาด เรียงคีย์ ดูเป็นต้นไม้พร้อมคัดลอกเส้นทาง แปลงเป็น TypeScript interface และชี้บรรทัดที่ผิด',
+      en: 'Format, minify, sort keys, browse as a tree with copyable paths, generate a TypeScript interface, and see exactly which line failed.',
     },
     keywords: [
       'เจสัน',
@@ -21,11 +21,14 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
       'minify',
       'validate',
       'parser',
+      'typescript',
+      'interface',
+      'tree',
     ],
     category: 'developer',
     tier: 'A',
     icon: 'Braces',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
