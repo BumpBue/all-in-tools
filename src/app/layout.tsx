@@ -1,4 +1,4 @@
-import type { Metadata } from 'next';
+import type { Metadata, Viewport } from 'next';
 import { IBM_Plex_Mono, IBM_Plex_Sans_Thai } from 'next/font/google';
 
 import '@/app/globals.css';
@@ -7,10 +7,17 @@ import { CommandPaletteProvider } from '@/components/command-palette/provider';
 import { Footer } from '@/components/layout/footer';
 import { Header } from '@/components/layout/header';
 import { getMessages } from '@/config/i18n';
-import { SITE_DESCRIPTION, SITE_TITLE, SITE_URL } from '@/config/site';
+import { SITE_DESCRIPTION, SITE_NAME, SITE_TITLE, SITE_URL } from '@/config/site';
 import { PreferencesProvider } from '@/hooks/use-preferences';
 import { readPreferences } from '@/lib/cookies.server';
-import { DARK_CLASS, THEME_ATTRIBUTE, THEME_INIT_SCRIPT } from '@/lib/theme';
+import { ServiceWorker } from '@/components/pwa/service-worker';
+import {
+  DARK_CLASS,
+  THEME_ATTRIBUTE,
+  THEME_COLOR_DARK,
+  THEME_COLOR_LIGHT,
+  THEME_INIT_SCRIPT,
+} from '@/lib/theme';
 import { cn } from '@/lib/utils';
 
 const MAIN_ID = 'main-content';
@@ -33,6 +40,16 @@ export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
   title: SITE_TITLE.th,
   description: SITE_DESCRIPTION.th,
+  applicationName: SITE_NAME,
+  appleWebApp: { capable: true, title: SITE_NAME, statusBarStyle: 'default' },
+  icons: { apple: '/apple-touch-icon.png' },
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: '(prefers-color-scheme: light)', color: THEME_COLOR_LIGHT },
+    { media: '(prefers-color-scheme: dark)', color: THEME_COLOR_DARK },
+  ],
 };
 
 export default async function RootLayout({
@@ -79,6 +96,7 @@ export default async function RootLayout({
             </main>
 
             <Footer />
+            <ServiceWorker />
           </CommandPaletteProvider>
         </PreferencesProvider>
       </body>
