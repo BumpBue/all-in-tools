@@ -13,7 +13,8 @@ import { NO_TIME, useNowSeconds } from '@/hooks/use-now';
 import { useLocale } from '@/hooks/use-t';
 import { toDayKey } from '@/lib/day';
 import { downloadText } from '@/lib/download';
-import { buildIcs } from '@/tools/_shared/deck-formats';
+import { buildIcs } from '@/lib/ics';
+
 import {
   DECKS_STORAGE_SLUG,
   EMPTY_DECKS,

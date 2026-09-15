@@ -13,6 +13,8 @@ import { countStoredItems as countMatrixItems } from '@/tools/eisenhower-matrix/
 import { countStoredItems as countPomodoroItems } from '@/tools/pomodoro/logic';
 import { countStoredItems as countWheelItems } from '@/tools/randomizer-wheel/logic';
 
+import { countStoredItems as countGpaItems } from '@/tools/gpa-calculator/logic';
+
 export type ItemCounter = (data: unknown) => number;
 
 export function countItemsByShape(data: unknown): number {
@@ -22,6 +24,7 @@ export function countItemsByShape(data: unknown): number {
 }
 
 export const ITEM_COUNTERS: Record<string, ItemCounter> = {
+  'gpa-calculator': countGpaItems,
   'eisenhower-matrix': countMatrixItems,
   flashcards: countDeckItems,
   'habit-tracker': countHabitItems,
