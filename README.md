@@ -150,3 +150,7 @@ variable:
 `next.config.ts` sets `X-Content-Type-Options`, `X-Frame-Options` and
 `Referrer-Policy` on every route, and makes `/sw.js` uncacheable so a deploy cannot
 strand an old service worker.
+
+## License
+
+MIT — see [LICENSE](LICENSE).
