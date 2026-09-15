@@ -7,9 +7,12 @@ import {
   countStoredItems,
 } from '@/lib/storage-summary';
 
-const FAKE_SLUG = 'habit-tracker';
+// Deliberately not a real slug: this file adds and deletes its counter, and
+// naming a real tool would tear that tool's registration out of the map the
+// moment the tool shipped.
+const FAKE_SLUG = 'sample-tool';
 
-/** The nested shape the default counter gets wrong. */
+/** A nested shape the default counter gets wrong: it reads as two items. */
 const NESTED = {
   habits: [{ id: 'read' }, { id: 'water' }, { id: 'walk' }],
   logs: { '2026-09-01': ['read'], '2026-09-02': ['read', 'water'] },

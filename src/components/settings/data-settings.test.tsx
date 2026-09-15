@@ -35,7 +35,13 @@ function seedFakeData() {
       '2026-09-15': { rounds: 1, focusSeconds: 1500 },
     },
   });
-  setItem(HABIT_KEY, { reading: [1, 2], water: [3] });
+  setItem(HABIT_KEY, {
+    schema: 1,
+    habits: [
+      { id: 'h1', name: 'อ่านหนังสือ', targetPerWeek: 7, days: ['2026-09-14'] },
+      { id: 'h2', name: 'ดื่มน้ำ', targetPerWeek: 3, days: [] },
+    ],
+  });
   invalidateStoredData();
 }
 
