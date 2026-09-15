@@ -122,9 +122,10 @@ asserts that after typing both, `location.search` is still empty and
 `localStorage` is still empty. A promise made in prose is worth what the test
 that holds it to it is worth.
 
-A Tier C tool with a real data model also declares how its items are counted, or
-the settings page will report something meaningless: a habit tracker holding
-`{ habits: [...], logs: {...} }` reads as two items by default. Set
+A tool with a real data model — whatever its tier — also declares how its items
+are counted, or the settings page will report something meaningless: a habit
+tracker holding `{ habits: [...], logs: {...} }` reads as two items by default,
+and so does a wheel holding `{ presets: [...], history: [...] }`. Set
 `hasItemCounter: true` in the registry and add the counter to `ITEM_COUNTERS` in
 `src/lib/storage-summary.ts`, keyed by slug — the registry ships to the client
 whole, so functions stay out of it. `storage-summary.test.ts` checks the flag
@@ -193,7 +194,16 @@ changed after that regenerates from the same one. A seed the reader can type is
 then just the same value from a different source, and it makes the output
 reproducible for free.
 
-`Math.random` is not used anywhere in this project.
+`Math.random` is not used anywhere in this project. `createRandom` and
+`drawSeed` live in `src/lib/random.ts`; three tools draw from them and they all
+have to agree about where randomness comes from.
+
+**A clock is impure too.** `Date.now()` and `performance.now()` in a function
+in the component body are a compiler error, even when only an event handler
+calls them, because nothing proves that. Two ways out, both better than the
+call: take the time from the argument `requestAnimationFrame` hands the frame,
+or notice that the value was never shown and stop keeping it. A markdown draft
+needs to say it is saved, not the second it happened.
 
 ## Async work in a hook
 
@@ -331,6 +341,21 @@ edit script says, the left side must come back exactly and so must the right.
 That is what proves the backtrack never loses or invents a token, and no list
 of hand-written examples would have. Seed the generator so a failure can be
 re-run.
+
+**A format somebody else will read is tested by reading it back with something
+that is not the writer.** The zip in `image-resizer` is checked by an extractor
+written from the zip spec, which walks the end record to the central directory
+and follows each offset — the two only agree if the output really is a zip.
+Reusing the writer's own constants to parse it would prove nothing. The same
+goes for anything escaped on the way out: a CSV field holding a comma and a
+quote, an SQL value holding an apostrophe. Test the value that would break out
+of the field, not the one that would not.
+
+**A test that depends on which tools have shipped will go quiet.** One asserted
+that a search put a planned tool last, and stopped checking anything the day
+every match had shipped. Assert the invariant against fabricated data, or
+against what the component owes — the palette owes the order the search gave
+it — rather than against whatever the registry happens to hold today.
 
 Interactive behaviour worth a test goes in a `*.test.tsx` beside the component
 using `@/test/react`; see `command-palette.test.tsx`. Two traps there:
