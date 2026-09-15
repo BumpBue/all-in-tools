@@ -132,6 +132,46 @@ whole, so functions stay out of it. `storage-summary.test.ts` checks the flag
 and the map against each other. Do this when the data model is written, not
 later.
 
+## Tools that own data
+
+Four rules, and they are not optional once a tool keeps anything:
+
+**A schema number lives inside the data, and a `migrate` reads it.** The
+storage envelope has a version of its own, but that one describes the envelope
+— `getItem` discards data whose envelope version it does not know. The schema
+number describes the shape inside. Export a `migrate(raw: unknown)` that turns
+whatever came out of storage into something valid, repairing a field of the
+wrong type rather than throwing and refusing anything from a schema newer than
+this one. Write it on day one: the person who changes the schema should not
+also have to invent the place to put the change. `src/lib/schema.ts` has the
+readers.
+
+**Actions carry the time they happened.** A reducer that reads a clock is not
+testable and not pure; one that takes `now` in the action is both. The whole
+pomodoro — pausing, resuming, a tab asleep for ten minutes — is tested without
+waiting for anything.
+
+**The reducer lives in `logic.ts`.** State transitions are the part worth
+testing, and they should be testable without rendering. `index.tsx` dispatches
+and draws.
+
+**Never hand out an id that is already taken.** `migrate` scans the ids it
+loaded and starts the counter above the highest, whatever the stored counter
+said. A file edited by hand, or written by an older version, otherwise produces
+two cards with the same id and a list that updates the wrong one.
+
+## Two tools, one data model
+
+`flashcards` and `spaced-repetition` are one model behind two pages: decks are
+built on one and reviewed on the other, and both read and write the same key.
+The model lives in `src/tools/_shared/`, which neither owns, because the rule
+against importing across tool folders exists to stop exactly the coupling that
+copying it would create — and two copies of a deck would disagree within a day.
+
+The tool that does not own the key sets `needsStorage: false`, since the flag
+means "has a storage key of its own". Say so in the registry beside it, or the
+next reader will take it for a tool that keeps nothing.
+
 ## Values that change on their own
 
 A clock, a countdown, anything reading `Date.now()`: the server has no "now"
@@ -351,11 +391,13 @@ goes for anything escaped on the way out: a CSV field holding a comma and a
 quote, an SQL value holding an apostrophe. Test the value that would break out
 of the field, not the one that would not.
 
-**A test that depends on which tools have shipped will go quiet.** One asserted
-that a search put a planned tool last, and stopped checking anything the day
-every match had shipped. Assert the invariant against fabricated data, or
-against what the component owes — the palette owes the order the search gave
-it — rather than against whatever the registry happens to hold today.
+**A test that depends on which tools have shipped will go quiet — or worse.**
+One asserted that a search put a planned tool last, and stopped checking
+anything the day every match had shipped. Another used a real slug as its
+*fake* one and deleted that key from the counter map in `afterEach`, which tore
+out a real registration the moment that tool shipped. Use a slug that cannot
+ever exist — `sample-tool` — and assert against fabricated data or against what
+the component owes, rather than against whatever the registry holds today.
 
 Interactive behaviour worth a test goes in a `*.test.tsx` beside the component
 using `@/test/react`; see `command-palette.test.tsx`. Two traps there:
