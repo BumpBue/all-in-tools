@@ -65,13 +65,15 @@ const PAIRS: Array<[string, string, number]> = [
   // applies to it.
   ['ring', 'background', AA_LARGE],
   ['ring', 'surface', AA_LARGE],
+  // WCAG 1.4.11: a control's boundary is the only thing identifying it, and an
+  // input sits on --surface inside its border with --background outside, so the
+  // line has to clear 3:1 against both. Badges put it on --surface-subtle.
+  ['border', 'surface', AA_LARGE],
+  ['border', 'background', AA_LARGE],
+  ['border', 'surface-subtle', AA_LARGE],
+  ['border-strong', 'surface', AA_LARGE],
+  ['border-strong', 'background', AA_LARGE],
 ];
-
-// --border and --border-strong are deliberately absent. Neither carries
-// information on its own: --border outlines a card that is already separated by
-// its background, and --border-strong only appears on hover, over a border that
-// is visible anyway. Anything that fills a chart or states a value uses a token
-// listed above instead.
 
 
 describe.each([
