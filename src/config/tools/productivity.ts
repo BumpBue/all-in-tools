@@ -25,8 +25,9 @@ export const PRODUCTIVITY_TOOLS: readonly ToolDefinition[] = [
     category: 'productivity',
     tier: 'C',
     icon: 'Timer',
-    status: 'planned',
+    status: 'ready',
     needsStorage: true,
+    hasItemCounter: true,
   },
   {
     id: 2,
