@@ -83,8 +83,9 @@ export const PRODUCTIVITY_TOOLS: readonly ToolDefinition[] = [
     category: 'productivity',
     tier: 'C',
     icon: 'Layers',
-    status: 'planned',
+    status: 'ready',
     needsStorage: true,
+    hasItemCounter: true,
   },
   {
     id: 4,
@@ -165,8 +166,11 @@ export const PRODUCTIVITY_TOOLS: readonly ToolDefinition[] = [
     category: 'productivity',
     tier: 'C',
     icon: 'Repeat',
-    status: 'planned',
-    needsStorage: true,
+    status: 'ready',
+    // Keeps real state, but under the flashcards key rather than one of its
+    // own: the two tools are one data model behind two pages. The flag means
+    // "owns a storage key", and this one does not.
+    needsStorage: false,
   },
   {
     id: 7,
