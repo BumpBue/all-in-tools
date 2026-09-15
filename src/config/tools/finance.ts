@@ -81,8 +81,9 @@ export const FINANCE_TOOLS: readonly ToolDefinition[] = [
     category: 'finance',
     tier: 'C',
     icon: 'Scale',
-    status: 'planned',
+    status: 'ready',
     needsStorage: true,
+    hasItemCounter: true,
   },
   {
     id: 13,

@@ -8,17 +8,14 @@
  * registry and adds its counter here.
  */
 import { countStoredItems as countDeckItems } from '@/tools/_shared/decks';
-import { countStoredItems as countHabitItems } from '@/tools/habit-tracker/logic';
+import { countStoredItems as countSplitterItems } from '@/tools/bill-splitter/logic';
+import { countStoredItems as countCountdownItems } from '@/tools/countdown/logic';
+import { countStoredItems as countDecisionItems } from '@/tools/decision-matrix/logic';
 import { countStoredItems as countMatrixItems } from '@/tools/eisenhower-matrix/logic';
+import { countStoredItems as countGpaItems } from '@/tools/gpa-calculator/logic';
+import { countStoredItems as countHabitItems } from '@/tools/habit-tracker/logic';
 import { countStoredItems as countPomodoroItems } from '@/tools/pomodoro/logic';
 import { countStoredItems as countWheelItems } from '@/tools/randomizer-wheel/logic';
-
-import { countStoredItems as countGpaItems } from '@/tools/gpa-calculator/logic';
-
-import { countStoredItems as countCountdownItems } from '@/tools/countdown/logic';
-
-import { countStoredItems as countSplitterItems } from '@/tools/bill-splitter/logic';
-
 import { countStoredItems as countSubscriptionItems } from '@/tools/subscription-tracker/logic';
 
 export type ItemCounter = (data: unknown) => number;
@@ -31,6 +28,7 @@ export function countItemsByShape(data: unknown): number {
 
 export const ITEM_COUNTERS: Record<string, ItemCounter> = {
   'subscription-tracker': countSubscriptionItems,
+  'decision-matrix': countDecisionItems,
   'bill-splitter': countSplitterItems,
   'countdown': countCountdownItems,
   'gpa-calculator': countGpaItems,
