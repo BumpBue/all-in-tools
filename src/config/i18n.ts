@@ -64,6 +64,13 @@ const TH = {
       'ทุกเครื่องมือทำงานในเบราว์เซอร์ของคุณ ข้อมูลที่คุณกรอกไม่ถูกส่งออกไปที่ใดทั้งสิ้น',
     rights: 'ใช้งานได้ฟรี ไม่ต้องสมัครสมาชิก',
   },
+  install: {
+    action: 'ติดตั้งเป็นแอป',
+    hint: 'เปิดใช้ได้จากหน้าจอหลัก และยังใช้ได้ตอนไม่มีเน็ต',
+    dismiss: 'ไม่ติดตั้งตอนนี้',
+    iosTitle: 'ติดตั้งบน iPhone หรือ iPad',
+    iosSteps: 'กดปุ่มแบ่งปันในแถบล่างของ Safari แล้วเลือก "เพิ่มไปยังหน้าจอโฮม"',
+  },
   settings: {
     title: 'ตั้งค่า',
     appearance: 'การแสดงผล',
@@ -166,6 +173,14 @@ const EN: Dictionary = {
     privacy:
       'Every tool runs in your browser. Nothing you type is sent anywhere.',
     rights: 'Free to use, no account needed',
+  },
+  install: {
+    action: 'Install as an app',
+    hint: 'Opens from your home screen and keeps working without a connection.',
+    dismiss: 'Not now',
+    iosTitle: 'Installing on an iPhone or iPad',
+    iosSteps:
+      'Tap the share button in the Safari toolbar, then choose "Add to Home Screen".',
   },
   settings: {
     title: 'Settings',

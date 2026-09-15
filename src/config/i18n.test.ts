@@ -19,6 +19,8 @@ const CORE_SECTIONS = [
   'tool',
   'footer',
   'settings',
+  // The install button sits in the footer, so it is on every page too.
+  'install',
 ];
 
 function toCamelCase(slug: string): string {

@@ -5,6 +5,7 @@ import { ShieldCheck } from 'lucide-react';
 
 import { CATEGORY_META, CATEGORY_ORDER } from '@/config/tools';
 import { useLocale, useT } from '@/hooks/use-t';
+import { InstallButton } from '@/components/pwa/install-button';
 
 const ICON_SIZE = 16;
 
@@ -22,6 +23,7 @@ export function Footer() {
             {t.footer.privacy}
           </p>
           <p className="text-sm text-muted">{t.footer.rights}</p>
+          <InstallButton />
         </div>
 
         <nav aria-label={t.nav.categories} className="flex flex-col gap-2">
