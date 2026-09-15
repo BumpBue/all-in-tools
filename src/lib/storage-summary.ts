@@ -8,6 +8,7 @@
  * registry and adds its counter here.
  */
 import { countStoredItems as countDeckItems } from '@/tools/_shared/decks';
+import { countStoredItems as countHabitItems } from '@/tools/habit-tracker/logic';
 import { countStoredItems as countMatrixItems } from '@/tools/eisenhower-matrix/logic';
 import { countStoredItems as countPomodoroItems } from '@/tools/pomodoro/logic';
 import { countStoredItems as countWheelItems } from '@/tools/randomizer-wheel/logic';
@@ -23,6 +24,7 @@ export function countItemsByShape(data: unknown): number {
 export const ITEM_COUNTERS: Record<string, ItemCounter> = {
   'eisenhower-matrix': countMatrixItems,
   flashcards: countDeckItems,
+  'habit-tracker': countHabitItems,
   pomodoro: countPomodoroItems,
   'randomizer-wheel': countWheelItems,
 };

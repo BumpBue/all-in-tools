@@ -139,8 +139,9 @@ export const PRODUCTIVITY_TOOLS: readonly ToolDefinition[] = [
     category: 'productivity',
     tier: 'C',
     icon: 'CalendarCheck',
-    status: 'planned',
+    status: 'ready',
     needsStorage: true,
+    hasItemCounter: true,
   },
   {
     id: 6,
