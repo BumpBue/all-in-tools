@@ -145,7 +145,12 @@ variable:
 
 | Variable | Needed? | What it does |
 | --- | --- | --- |
-| `NEXT_PUBLIC_SITE_URL` | Recommended | Canonical URLs, Open Graph, and `sitemap.xml`. Falls back to a placeholder. |
+| `NEXT_PUBLIC_SITE_URL` | Recommended | Canonical URLs, Open Graph, and `sitemap.xml`. |
+
+If that variable is missing, empty, or not a URL, the build does **not** fail: it
+falls back to `https://all-in-tools.vercel.app`, prints a `[config]` warning, and
+carries on. Canonical URLs and the sitemap will then point at the wrong host, so
+watch the build log for that warning.
 
 `next.config.ts` sets `X-Content-Type-Options`, `X-Frame-Options` and
 `Referrer-Policy` on every route, and makes `/sw.js` uncacheable so a deploy cannot
