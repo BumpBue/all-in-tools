@@ -1,6 +1,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { buildToolStorageKey } from '@/config/storage-keys';
+import { testSlug } from '@/test/fixtures';
 import {
   clearAll,
   exportAll,
@@ -431,14 +432,14 @@ describe('summarizeStorage', () => {
 });
 
 describe('inspectImport', () => {
-  // Made-up slugs on purpose: a real one would start counting its items its own
-  // way the day that tool gains a counter, and this is about the summary.
+  // Slugs that cannot be real: a real one would start counting its items its
+  // own way the day that tool gains a counter, and this is about the summary.
   const payload = JSON.stringify({
     app: 'tools',
     schemaVersion: 1,
     tools: {
-      'sample-list': { version: 1, data: [1, 2], updatedAt: 5 },
-      'sample-record': { version: 1, data: { a: 1 }, updatedAt: 6 },
+      [testSlug('list')]: { version: 1, data: [1, 2], updatedAt: 5 },
+      [testSlug('record')]: { version: 1, data: { a: 1 }, updatedAt: 6 },
     },
   });
 
@@ -448,8 +449,8 @@ describe('inspectImport', () => {
     expect(preview.ok).toBe(true);
     expect(preview.errors).toEqual([]);
     expect(preview.tools).toEqual([
-      { slug: 'sample-list', itemCount: 2, updatedAt: 5 },
-      { slug: 'sample-record', itemCount: 1, updatedAt: 6 },
+      { slug: testSlug('list'), itemCount: 2, updatedAt: 5 },
+      { slug: testSlug('record'), itemCount: 1, updatedAt: 6 },
     ]);
   });
 

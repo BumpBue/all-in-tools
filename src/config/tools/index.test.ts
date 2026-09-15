@@ -1,5 +1,7 @@
 import { describe, expect, it } from 'vitest';
 
+import { TEST_SLUG_PREFIX } from '@/test/fixtures';
+
 import {
   CATEGORY_META,
   CATEGORY_ORDER,
@@ -164,6 +166,15 @@ describe('searchTools', () => {
 
   it('returns an empty list when nothing matches', () => {
     expect(searchTools('zzzzqqqxyw')).toEqual([]);
+  });
+});
+
+describe('slugs reserved for tests', () => {
+  // Fixtures build slugs with this prefix so deleting or overwriting one can
+  // never touch a real tool. The guarantee only holds if no tool uses it.
+  it('is a prefix no real tool uses', () => {
+    const clashes = TOOLS.filter((tool) => tool.slug.startsWith(TEST_SLUG_PREFIX));
+    expect(clashes).toEqual([]);
   });
 });
 

@@ -391,13 +391,23 @@ goes for anything escaped on the way out: a CSV field holding a comma and a
 quote, an SQL value holding an apostrophe. Test the value that would break out
 of the field, not the one that would not.
 
-**A test that depends on which tools have shipped will go quiet — or worse.**
-One asserted that a search put a planned tool last, and stopped checking
-anything the day every match had shipped. Another used a real slug as its
-*fake* one and deleted that key from the counter map in `afterEach`, which tore
-out a real registration the moment that tool shipped. Use a slug that cannot
-ever exist — `sample-tool` — and assert against fabricated data or against what
-the component owes, rather than against whatever the registry holds today.
+**A fixture's made-up slug must be impossible, not merely unlikely.** Build it
+with `testSlug()` from `@/test/fixtures`, which prefixes `zz-test-`; a registry
+test asserts no real tool ever starts with it. A name that merely looks fake is
+not enough: one test used `habit-tracker` as its fake slug and deleted that key
+from the counter map in `afterEach`. It passed for months and then tore out a
+real registration the day that tool shipped — silently, because deleting a key
+that exists throws nothing. The same goes for ids and storage keys.
+
+**A test that depends on which tools have shipped will go quiet.** One asserted
+that a search put a planned tool last, and stopped checking anything the day
+every match had shipped. Assert against fabricated data, or against what the
+component owes — the palette owes the order the search gave it — rather than
+against whatever the registry holds today.
+
+**A fixture's shape must be the shape the tool really stores.** Seeding a
+pomodoro with `[{started: 1}]` tested nothing once the tool grew a counter that
+reads `days`.
 
 Interactive behaviour worth a test goes in a `*.test.tsx` beside the component
 using `@/test/react`; see `command-palette.test.tsx`. Two traps there:

@@ -1,16 +1,17 @@
 import { afterEach, describe, expect, it } from 'vitest';
 
 import { TOOLS } from '@/config/tools';
+import { testSlug } from '@/test/fixtures';
 import {
   ITEM_COUNTERS,
   countItemsByShape,
   countStoredItems,
 } from '@/lib/storage-summary';
 
-// Deliberately not a real slug: this file adds and deletes its counter, and
-// naming a real tool would tear that tool's registration out of the map the
-// moment the tool shipped.
-const FAKE_SLUG = 'sample-tool';
+// Shaped so it cannot collide with a real tool: this file adds and deletes its
+// counter, and naming a real slug would tear that tool's registration out of
+// the map the moment it shipped.
+const FAKE_SLUG = testSlug('counter');
 
 /** A nested shape the default counter gets wrong: it reads as two items. */
 const NESTED = {
