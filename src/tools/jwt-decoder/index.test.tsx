@@ -4,7 +4,7 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { PreferencesProvider } from '@/hooks/use-preferences';
 import type { Preferences } from '@/lib/cookies';
-import { render, settleTasks as settle, typeInto } from '@/test/react';
+import { render, settleTasks as settle, settleUntil, typeInto } from '@/test/react';
 import JwtDecoder from '@/tools/jwt-decoder';
 
 vi.mock('next/navigation', () => ({
@@ -91,12 +91,16 @@ describe('JwtDecoder', () => {
     await settle();
 
     typeInto(secretBox(), SECRET);
-    await settle();
-    expect(document.body.textContent).toContain('ลายเซ็นถูกต้อง');
+    await settleUntil(
+      () => document.body.textContent?.includes('ลายเซ็นถูกต้อง') === true,
+      'the signature to be accepted',
+    );
 
     typeInto(secretBox(), 'wrong');
-    await settle();
-    expect(document.body.textContent).not.toContain('ลายเซ็นถูกต้อง');
+    await settleUntil(
+      () => document.body.textContent?.includes('ลายเซ็นถูกต้อง') === false,
+      'the wrong secret to be refused',
+    );
 
     view.unmount();
   });

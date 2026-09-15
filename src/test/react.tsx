@@ -2,6 +2,8 @@ import { act } from 'react';
 import { createRoot, type Root } from 'react-dom/client';
 import type { ReactNode } from 'react';
 
+const SETTLE_ATTEMPTS = 200;
+
 export interface RenderHookResult<T> {
   /** Every value the hook returned, in render order. */
   renders: T[];
@@ -101,6 +103,20 @@ export async function settleTasks(): Promise<void> {
   await act(async () => {
     await new Promise((resolve) => setTimeout(resolve, 0));
   });
+}
+
+/**
+ * Waits for work whose number of turns is not knowable: a WebCrypto call may
+ * resolve in one task on an idle machine and several when test workers compete
+ * for the CPU. Polling to a deadline is what keeps that from being a flake.
+ */
+export async function settleUntil(ready: () => boolean, what: string): Promise<void> {
+  for (let attempt = 0; attempt < SETTLE_ATTEMPTS; attempt += 1) {
+    await settleTasks();
+    if (ready()) return;
+  }
+
+  throw new Error(`gave up waiting for ${what}`);
 }
 
 export function jsonFile(name: string, contents: string, type = 'application/json'): File {
