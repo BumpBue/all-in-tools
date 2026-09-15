@@ -59,7 +59,7 @@ describe('countStoredItems', () => {
 
   it('keeps the fallback for other tools when one declares a counter', () => {
     ITEM_COUNTERS[FAKE_SLUG] = () => 99;
-    expect(countStoredItems('pomodoro', [1, 2, 3])).toBe(3);
+    expect(countStoredItems('markdown-preview', [1, 2, 3])).toBe(3);
   });
 
   it('falls back when a counter throws rather than breaking the page', () => {

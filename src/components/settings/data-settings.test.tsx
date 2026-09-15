@@ -24,8 +24,17 @@ const POMODORO_KEY = buildToolStorageKey('pomodoro');
 const HABIT_KEY = buildToolStorageKey('habit-tracker');
 const CONFIRM_WORD = 'ลบทั้งหมด';
 
+// Shaped the way each tool really stores its data, since both declare their
+// own item counter: three days of pomodoro rounds, two tracked habits.
 function seedFakeData() {
-  setItem(POMODORO_KEY, [{ started: 1 }, { started: 2 }, { started: 3 }]);
+  setItem(POMODORO_KEY, {
+    schema: 1,
+    days: {
+      '2026-09-13': { rounds: 2, focusSeconds: 3000 },
+      '2026-09-14': { rounds: 4, focusSeconds: 6000 },
+      '2026-09-15': { rounds: 1, focusSeconds: 1500 },
+    },
+  });
   setItem(HABIT_KEY, { reading: [1, 2], water: [3] });
   invalidateStoredData();
 }

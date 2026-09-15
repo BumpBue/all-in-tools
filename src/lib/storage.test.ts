@@ -16,7 +16,9 @@ import {
 
 const QUOTA_ERROR_NAME = 'QuotaExceededError';
 const FALLBACK = { note: 'fallback' };
-const SAMPLE_SLUG = 'pomodoro';
+// A tool whose stored data is counted by its shape: markdown-preview keeps a
+// plain draft, so it has no counter of its own and never will.
+const SAMPLE_SLUG = 'markdown-preview';
 const SAMPLE_KEY = buildToolStorageKey(SAMPLE_SLUG);
 const UNRELATED_KEY = 'analytics:session';
 
@@ -256,11 +258,11 @@ describe('importAll validation', () => {
       JSON.stringify({
         app: 'tools',
         schemaVersion: 1,
-        tools: { pomodoro: { data: { minutes: 25 } } },
+        tools: { [SAMPLE_SLUG]: { data: { minutes: 25 } } },
       }),
     );
     expect(result.ok).toBe(false);
-    expect(result.errors[0]).toContain('pomodoro');
+    expect(result.errors[0]).toContain(SAMPLE_SLUG);
   });
 
   it('rejects an entry with an unsafe slug', () => {
@@ -281,7 +283,7 @@ describe('importAll validation', () => {
         app: 'tools',
         schemaVersion: 1,
         tools: {
-          pomodoro: { version: 1, data: { minutes: 50 }, updatedAt: 0 },
+          [SAMPLE_SLUG]: { version: 1, data: { minutes: 50 }, updatedAt: 0 },
           flashcards: { data: 'missing envelope fields' },
         },
       }),
@@ -294,7 +296,7 @@ describe('importAll modes', () => {
   const payload = JSON.stringify({
     app: 'tools',
     schemaVersion: 1,
-    tools: { pomodoro: { version: 1, data: { minutes: 50 }, updatedAt: 123 } },
+    tools: { [SAMPLE_SLUG]: { version: 1, data: { minutes: 50 }, updatedAt: 123 } },
   });
 
   beforeEach(() => {
@@ -429,12 +431,14 @@ describe('summarizeStorage', () => {
 });
 
 describe('inspectImport', () => {
+  // Made-up slugs on purpose: a real one would start counting its items its own
+  // way the day that tool gains a counter, and this is about the summary.
   const payload = JSON.stringify({
     app: 'tools',
     schemaVersion: 1,
     tools: {
-      pomodoro: { version: 1, data: [1, 2], updatedAt: 5 },
-      flashcards: { version: 1, data: { a: 1 }, updatedAt: 6 },
+      'sample-list': { version: 1, data: [1, 2], updatedAt: 5 },
+      'sample-record': { version: 1, data: { a: 1 }, updatedAt: 6 },
     },
   });
 
@@ -444,8 +448,8 @@ describe('inspectImport', () => {
     expect(preview.ok).toBe(true);
     expect(preview.errors).toEqual([]);
     expect(preview.tools).toEqual([
-      { slug: 'pomodoro', itemCount: 2, updatedAt: 5 },
-      { slug: 'flashcards', itemCount: 1, updatedAt: 6 },
+      { slug: 'sample-list', itemCount: 2, updatedAt: 5 },
+      { slug: 'sample-record', itemCount: 1, updatedAt: 6 },
     ]);
   });
 
