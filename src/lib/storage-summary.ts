@@ -7,6 +7,7 @@
  * habits. A tool with a real data model declares `hasItemCounter` in the
  * registry and adds its counter here.
  */
+import { countStoredItems as countMatrixItems } from '@/tools/eisenhower-matrix/logic';
 import { countStoredItems as countPomodoroItems } from '@/tools/pomodoro/logic';
 import { countStoredItems as countWheelItems } from '@/tools/randomizer-wheel/logic';
 
@@ -19,6 +20,7 @@ export function countItemsByShape(data: unknown): number {
 }
 
 export const ITEM_COUNTERS: Record<string, ItemCounter> = {
+  'eisenhower-matrix': countMatrixItems,
   pomodoro: countPomodoroItems,
   'randomizer-wheel': countWheelItems,
 };

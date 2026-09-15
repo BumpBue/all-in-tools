@@ -54,8 +54,9 @@ export const PRODUCTIVITY_TOOLS: readonly ToolDefinition[] = [
     category: 'productivity',
     tier: 'C',
     icon: 'Grid2x2',
-    status: 'planned',
+    status: 'ready',
     needsStorage: true,
+    hasItemCounter: true,
   },
   {
     id: 3,
