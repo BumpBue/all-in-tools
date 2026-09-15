@@ -6,7 +6,7 @@
  * tool registered there ships to every tool page. Keep this list in step with
  * the directories; routes.test.ts checks it against the filesystem.
  */
-export const TOOLS_WITH_OWN_ROUTE: readonly string[] = ['base-converter', 'base64', 'url-encoder', 'hash-generator', 'uuid-generator', 'text-cleaner', 'timestamp-converter', 'date-calculator', 'word-counter', 'aspect-ratio', 'color-converter', 'contrast-checker', 'json-formatter', 'regex-tester', 'jwt-decoder', 'text-diff', 'target-grade', 'thai-lorem-ipsum', 'unit-converter', 'qr-generator', 'markdown-preview', 'css-generator', 'mock-data-generator', 'cron-generator', 'randomizer-wheel', 'image-resizer', 'pomodoro', 'eisenhower-matrix', 'flashcards', 'spaced-repetition', 'habit-tracker', 'gpa-calculator', 'countdown', 'bill-splitter'];
+export const TOOLS_WITH_OWN_ROUTE: readonly string[] = ['base-converter', 'base64', 'url-encoder', 'hash-generator', 'uuid-generator', 'text-cleaner', 'timestamp-converter', 'date-calculator', 'word-counter', 'aspect-ratio', 'color-converter', 'contrast-checker', 'json-formatter', 'regex-tester', 'jwt-decoder', 'text-diff', 'target-grade', 'thai-lorem-ipsum', 'unit-converter', 'qr-generator', 'markdown-preview', 'css-generator', 'mock-data-generator', 'cron-generator', 'randomizer-wheel', 'image-resizer', 'pomodoro', 'eisenhower-matrix', 'flashcards', 'spaced-repetition', 'habit-tracker', 'gpa-calculator', 'countdown', 'bill-splitter', 'subscription-tracker'];
 
 const OWN_ROUTES = new Set(TOOLS_WITH_OWN_ROUTE);
 
