@@ -7,6 +7,8 @@
  * habits. A tool with a real data model declares `hasItemCounter` in the
  * registry and adds its counter here.
  */
+import { countStoredItems as countWheelItems } from '@/tools/randomizer-wheel/logic';
+
 export type ItemCounter = (data: unknown) => number;
 
 export function countItemsByShape(data: unknown): number {
@@ -15,7 +17,9 @@ export function countItemsByShape(data: unknown): number {
   return data === null || data === undefined ? 0 : 1;
 }
 
-export const ITEM_COUNTERS: Record<string, ItemCounter> = {};
+export const ITEM_COUNTERS: Record<string, ItemCounter> = {
+  'randomizer-wheel': countWheelItems,
+};
 
 export function countStoredItems(slug: string, data: unknown): number {
   const counter = ITEM_COUNTERS[slug];
