@@ -165,7 +165,7 @@ export const DESIGN_TOOLS: readonly ToolDefinition[] = [
     category: 'design',
     tier: 'B',
     icon: 'ImageDown',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
