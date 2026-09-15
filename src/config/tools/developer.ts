@@ -138,7 +138,7 @@ export const DEVELOPER_TOOLS: readonly ToolDefinition[] = [
     category: 'developer',
     tier: 'B',
     icon: 'AlarmClock',
-    status: 'planned',
+    status: 'ready',
     needsStorage: false,
   },
   {
