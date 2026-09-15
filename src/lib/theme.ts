@@ -4,6 +4,12 @@ export const DARK_CLASS = 'dark';
 export const THEME_ATTRIBUTE = 'data-theme';
 export const DARK_MEDIA_QUERY = '(prefers-color-scheme: dark)';
 
+// The browser chrome and the PWA splash cannot read an oklch custom property,
+// so --background is mirrored here as hex. `pnpm icons` derives the icon from
+// the same tokens; keep these in step with globals.css.
+export const THEME_COLOR_LIGHT = '#f9fafb';
+export const THEME_COLOR_DARK = '#0d0f13';
+
 export function resolveTheme(theme: Theme): 'light' | 'dark' {
   if (theme !== 'system') return theme;
   if (typeof window === 'undefined') return 'light';
