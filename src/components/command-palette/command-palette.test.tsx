@@ -2,7 +2,7 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { CommandPaletteProvider } from '@/components/command-palette/provider';
-import { TOOL_COUNT } from '@/config/tools';
+import { TOOL_COUNT, searchTools } from '@/config/tools';
 import { PreferencesProvider } from '@/hooks/use-preferences';
 import type { Preferences } from '@/lib/cookies';
 import { pressKey, render, typeInto } from '@/test/react';
@@ -198,18 +198,27 @@ describe('searching', () => {
     view.unmount();
   });
 
-  it('sorts ready tools ahead of planned ones', () => {
+  // The ranking itself is tested against the registry in config/tools; what
+  // the palette owes is to render that order unchanged. Asserting "a planned
+  // tool comes last" here quietly stopped checking anything once every tool
+  // matching the query had shipped.
+  it('renders results in the order the search returns them', () => {
     const view = open();
-    typeInto(input(), 'แปลง');
+    const query = 'แปลง';
+    typeInto(input(), query);
 
-    const statuses = [...document.querySelectorAll('[role="option"]')].map((node) =>
-      node.textContent?.includes('เร็วๆ นี้') ? 'planned' : 'ready',
+    const expected = searchTools(query).map((tool) => tool.name.th);
+    const rendered = [...document.querySelectorAll('[role="option"]')].map(
+      (node) => node.textContent ?? '',
     );
-    const firstPlanned = statuses.indexOf('planned');
-    const lastReady = statuses.lastIndexOf('ready');
 
-    expect(firstPlanned).toBeGreaterThan(-1);
-    expect(lastReady).toBeLessThan(firstPlanned);
+    expect(expected.length).toBeGreaterThan(1);
+    expect(rendered).toHaveLength(expected.length);
+
+    for (const [index, name] of expected.entries()) {
+      expect(rendered[index]).toContain(name);
+    }
+
     view.unmount();
   });
 
