@@ -17,6 +17,8 @@ import { countStoredItems as countGpaItems } from '@/tools/gpa-calculator/logic'
 
 import { countStoredItems as countCountdownItems } from '@/tools/countdown/logic';
 
+import { countStoredItems as countSplitterItems } from '@/tools/bill-splitter/logic';
+
 export type ItemCounter = (data: unknown) => number;
 
 export function countItemsByShape(data: unknown): number {
@@ -26,6 +28,7 @@ export function countItemsByShape(data: unknown): number {
 }
 
 export const ITEM_COUNTERS: Record<string, ItemCounter> = {
+  'bill-splitter': countSplitterItems,
   'countdown': countCountdownItems,
   'gpa-calculator': countGpaItems,
   'eisenhower-matrix': countMatrixItems,
