@@ -475,7 +475,7 @@ export default function DecisionMatrix({ searchParams }: ToolComponentProps) {
                       <span className="font-mono">{entry.score.toFixed(2)}</span>
                     </div>
                     <div
-                      className={`h-2 rounded-full ${entry.rank === 1 ? 'bg-accent' : 'bg-border-strong'}`}
+                      className={`h-2 rounded-full ${entry.rank === 1 ? 'bg-accent' : 'bg-muted'}`}
                       style={{
                         width: `${best <= 0 ? 2 : Math.max(2, (entry.score / best) * BAR_PERCENT)}%`,
                       }}
