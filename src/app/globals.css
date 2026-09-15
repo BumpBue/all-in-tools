@@ -17,7 +17,7 @@
   --accent-subtle: oklch(0.955 0.022 266);
   --danger: oklch(0.55 0.2 25);
   --on-danger: oklch(0.99 0 0);
-  --success: oklch(0.55 0.14 152);
+  --success: oklch(0.53 0.14 152);
   --ring: oklch(0.53 0.19 266);
   --overlay: oklch(0.21 0.012 258 / 0.45);
 }
