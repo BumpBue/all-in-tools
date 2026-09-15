@@ -342,6 +342,8 @@ export default function QrGenerator({ searchParams }: ToolComponentProps) {
             type="file"
             accept="image/*"
             className="sr-only"
+            tabIndex={-1}
+            aria-hidden
             onChange={(event) => void chooseLogo(event.target.files?.[0])}
           />
           <Button

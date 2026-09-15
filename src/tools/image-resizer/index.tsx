@@ -218,6 +218,8 @@ export default function ImageResizer() {
           accept="image/*"
           multiple
           className="sr-only"
+          tabIndex={-1}
+          aria-hidden
           onChange={(event) => addFiles([...(event.target.files ?? [])])}
         />
         <Button variant="secondary" onClick={() => inputRef.current?.click()}>
