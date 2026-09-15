@@ -15,6 +15,8 @@ import { countStoredItems as countWheelItems } from '@/tools/randomizer-wheel/lo
 
 import { countStoredItems as countGpaItems } from '@/tools/gpa-calculator/logic';
 
+import { countStoredItems as countCountdownItems } from '@/tools/countdown/logic';
+
 export type ItemCounter = (data: unknown) => number;
 
 export function countItemsByShape(data: unknown): number {
@@ -24,6 +26,7 @@ export function countItemsByShape(data: unknown): number {
 }
 
 export const ITEM_COUNTERS: Record<string, ItemCounter> = {
+  'countdown': countCountdownItems,
   'gpa-calculator': countGpaItems,
   'eisenhower-matrix': countMatrixItems,
   flashcards: countDeckItems,

@@ -252,7 +252,8 @@ export const PRODUCTIVITY_TOOLS: readonly ToolDefinition[] = [
     category: 'productivity',
     tier: 'C',
     icon: 'CalendarClock',
-    status: 'planned',
+    status: 'ready',
     needsStorage: true,
+    hasItemCounter: true,
   },
 ];
